@@ -46,7 +46,7 @@ export const DropdownMenu = ({
           data-slot="dropdown-menu-content"
           sideOffset={sideOffset}
           className={cn(
-            "z-50 min-w-35 divide-y overflow-x-hidden overflow-y-auto rounded-lg border bg-neutral-50 shadow-md",
+            "z-50 min-w-35 divide-y overflow-x-hidden overflow-y-auto rounded-lg border bg-neutral-50 shadow-sm",
 
             "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
 
@@ -66,7 +66,7 @@ export const DropdownMenuItem = ({
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
-        "relative flex h-9 items-center px-4 py-2 pl-10 text-sm outline-none select-none data-highlighted:bg-neutral-100",
+        "relative flex h-9 items-center gap-2 px-4 py-2 text-sm outline-none select-none data-highlighted:bg-neutral-100 [&>svg]:size-4",
         className,
       )}
       {...props}
@@ -82,7 +82,7 @@ export const DropdownMenuCheckboxItem = ({
   return (
     <DropdownMenuPrimitive.CheckboxItem
       className={cn(
-        "group relative flex h-9 items-center px-4 py-2 pl-10 text-sm outline-none select-none data-highlighted:bg-neutral-100",
+        "group relative flex h-9 items-center gap-2 px-4 py-2 pl-10 text-sm outline-none select-none data-highlighted:bg-neutral-100 [&>svg]:size-4",
         className,
       )}
       {...props}

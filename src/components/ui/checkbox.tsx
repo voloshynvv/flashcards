@@ -17,7 +17,7 @@ export const Checkbox = ({
       {...props}
     >
       <CheckboxPrimitive.Indicator className="grid place-content-center text-current transition-none">
-        <CheckIcon className="size-3.5" />
+        <CheckIcon className="size-3" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );
