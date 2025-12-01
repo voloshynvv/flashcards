@@ -4,5 +4,10 @@ export const Label = ({
   className,
   ...props
 }: React.ComponentProps<"label">) => {
-  return <label className={cn("block leading-5", className)} {...props} />;
+  return (
+    <label
+      className={cn("block leading-5 select-none", className)}
+      {...props}
+    />
+  );
 };

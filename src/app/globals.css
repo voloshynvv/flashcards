@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme inline {
   --font-display: var(--font-poppins);
@@ -37,5 +38,11 @@
     font-weight: 500;
     background-color: var(--color-neutral-100);
     color: var(--color-neutral-900);
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-r-4 border-b-4 bg-neutral-50;
   }
 }
