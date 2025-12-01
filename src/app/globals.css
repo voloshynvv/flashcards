@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
+  --font-display: var(--font-poppins);
+
   --color-*: initial;
   --color-neutral-50: #ffffff;
   --color-neutral-100: #f7f3f0;
@@ -13,13 +15,27 @@
   --color-pink-400: #fc8ae5;
   --color-pink-500: #f073a3;
   --color-pink-700: #e11966;
-
-  --font-display: var(--font-poppins);
+  --color-border: #2e1401;
 }
 
-body {
-  font-family: var(--font-display);
-  font-weight: 500;
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-900);
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border, currentColor);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  body {
+    font-family: var(--font-display);
+    font-weight: 500;
+    background-color: var(--color-neutral-100);
+    color: var(--color-neutral-900);
+  }
 }
