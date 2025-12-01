@@ -16,9 +16,11 @@
   --color-pink-400: #fc8ae5;
   --color-pink-500: #f073a3;
   --color-pink-700: #e11966;
-  --color-border: #2e1401;
 
-  --shadow-border-xs: 1px 2px 0 0 var(--color-border);
+  --color-border: #2e1401;
+  --color-ring: var(--color-blue-600);
+
+  --shadow-border-xs: 1px 1px 0 0 var(--color-border);
   --shadow-border-sm: 2px 2px 0 0 var(--color-border);
   --shadow-border-md: 3px 3px 0 0 var(--color-border);
   --shadow-border-lg: 4px 4px 0 0 var(--color-border);
@@ -31,6 +33,10 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-border, currentColor);
+  }
+
+  * {
+    @apply outline-ring outline-offset-4;
   }
 
   button:not(:disabled),

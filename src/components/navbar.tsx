@@ -35,7 +35,7 @@ export const Navbar = () => {
       </Link>
 
       <nav>
-        <ul className="shadow-border-xs flex w-fit gap-1 rounded-full border bg-neutral-50 p-1">
+        <ul className="flex w-fit gap-1 rounded-full border bg-neutral-50 p-1 shadow-[1px_2px_0px_0px]">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
 
@@ -43,9 +43,9 @@ export const Navbar = () => {
               <li key={item.href}>
                 <Link
                   className={cn(
-                    "block rounded-full border px-3 py-1.5 font-semibold md:px-4 md:py-2",
+                    "block rounded-full border px-3 py-1.5 font-semibold transition-colors md:px-4 md:py-2",
                     isActive && "bg-yellow-500",
-                    !isActive && "border-transparent",
+                    !isActive && "hover:border-border border-transparent",
                   )}
                   href={item.href}
                 >

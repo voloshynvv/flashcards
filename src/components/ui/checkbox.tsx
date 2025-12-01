@@ -11,7 +11,7 @@ export const Checkbox = ({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "size-4 shrink-0 rounded-sm border bg-neutral-50 data-[state=checked]:bg-yellow-500",
+        "hover:shadow-border-xs size-4 shrink-0 rounded-sm border bg-neutral-50 transition-shadow disabled:pointer-events-none disabled:opacity-50 data-[state=checked]:bg-yellow-500",
         className,
       )}
       {...props}
