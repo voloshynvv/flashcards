@@ -17,6 +17,11 @@
   --color-pink-500: #f073a3;
   --color-pink-700: #e11966;
   --color-border: #2e1401;
+
+  --shadow-border-xs: 1px 2px 0 0 var(--color-border);
+  --shadow-border-sm: 2px 2px 0 0 var(--color-border);
+  --shadow-border-md: 3px 3px 0 0 var(--color-border);
+  --shadow-border-lg: 4px 4px 0 0 var(--color-border);
 }
 
 @layer base {
@@ -38,11 +43,5 @@
     font-weight: 500;
     background-color: var(--color-neutral-100);
     color: var(--color-neutral-900);
-  }
-}
-
-@layer components {
-  .card {
-    @apply rounded-2xl border border-r-4 border-b-4 bg-neutral-50;
   }
 }
