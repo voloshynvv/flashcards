@@ -18,6 +18,8 @@ export const PATCH = async (
   const validatedBody = updateCardSchema.safeParse(body);
   const { id: cardId } = await ctx.params;
 
+  await new Promise<void>((resolve) => setTimeout(resolve, 1000));
+
   if (!validatedBody.success) {
     return Response.json(
       {
@@ -93,5 +95,25 @@ export const PATCH = async (
     });
   } catch {
     return Response.json({ error: "Failed to update card" }, { status: 500 });
+  }
+};
+
+export const DELETE = async (
+  request: Request,
+  ctx: RouteContext<"/api/cards/[id]">,
+) => {
+  const { id } = await ctx.params;
+
+  try {
+    await db.delete(card).where(eq(card.id, id));
+
+    return Response.json(
+      { message: "Card deleted successfully" },
+      {
+        status: 200,
+      },
+    );
+  } catch {
+    return Response.json({ error: "Failed to delete card" }, { status: 500 });
   }
 };

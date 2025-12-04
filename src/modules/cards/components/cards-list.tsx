@@ -1,17 +1,26 @@
 "use client";
 
+import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
+import { Card, cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
 import { CardsListFilters } from "./cards-list-filters";
 import { useFilters } from "../hooks/use-filters";
 import { cn } from "@/utils/cn";
+import { useDeleteCard } from "@/lib/mutations/delete-card.mutation";
 
 import { Empty } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { CardItem } from "./card-item";
+import { AlertDialog } from "@/components/ui/alert-dialog";
+import { UpdateCardDialog } from "./update-card-dialog";
 
 export const CardsList = () => {
+  const [activeDialog, setActiveDialog] = useState<string | null>(null);
+  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
+
   const { filters, updateFilters, resetFilters, filtersApplied } = useFilters();
+
+  const deleteCard = useDeleteCard();
 
   const cardsQuery = useInfiniteQuery(
     cardsInfiniteQueryOptions({
@@ -19,6 +28,21 @@ export const CardsList = () => {
       hideMastered: filters.hideMastered,
     }),
   );
+
+  const handleCloseDialog = () => {
+    setActiveDialog(null);
+    setSelectedCardId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!selectedCardId) return;
+
+    deleteCard.mutate(selectedCardId, {
+      onSuccess: () => {
+        handleCloseDialog();
+      },
+    });
+  };
 
   if (cardsQuery.isPending) {
     return <p>Pending...</p>;
@@ -29,6 +53,7 @@ export const CardsList = () => {
   }
 
   const cards = cardsQuery.data?.pages.map((page) => page.cards).flat();
+  const selectedCard = cards.find((card) => card.id === selectedCardId);
 
   if (cards.length === 0 && !filtersApplied) {
     return (
@@ -50,6 +75,7 @@ export const CardsList = () => {
           filtersApplied={filtersApplied}
         />
       </div>
+      {activeDialog}
 
       {cards.length === 0 ? (
         <Empty
@@ -60,8 +86,35 @@ export const CardsList = () => {
         <div className={cn("flex flex-col gap-10 md:gap-12")}>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
             {cards.map((card) => (
-              <CardItem key={card.id} card={card} />
+              <CardItem
+                key={card.id}
+                card={card}
+                onActionClick={(action) => {
+                  setActiveDialog(action);
+                  setSelectedCardId(card.id);
+                }}
+              />
             ))}
+
+            <AlertDialog
+              open={activeDialog === "delete"}
+              onOpenChange={handleCloseDialog}
+              title="Delete this card?"
+              description="This action can’t be undone."
+              isPending={deleteCard.isPending}
+              actionText="Delete Card"
+              onConfirm={(e) => {
+                e.preventDefault();
+                handleConfirmDelete();
+              }}
+            />
+
+            <UpdateCardDialog
+              open={activeDialog === "update"}
+              onOpenChange={handleCloseDialog}
+              onSubmit={handleCloseDialog}
+              card={selectedCard as Card}
+            />
           </div>
 
           {cardsQuery.hasNextPage && (

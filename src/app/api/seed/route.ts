@@ -20,10 +20,11 @@ export const GET = async () => {
     const insertedCards = await db
       .insert(card)
       .values(
-        data.map((c) => ({
+        data.map((c, i) => ({
           question: c.question,
           answer: c.answer,
           knownCount: c.knownCount || 0,
+          createdAt: new Date(Date.now() - i * 60 * 1000 * 5),
         })),
       )
       .returning();
