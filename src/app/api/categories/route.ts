@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { count, eq, ilike } from "drizzle-orm";
+import { count, desc, eq, ilike } from "drizzle-orm";
 import { db } from "@/db";
 import { cardToCategory, category } from "@/db/schema";
 
@@ -17,7 +17,9 @@ export const GET = async (request: NextRequest) => {
       .from(category)
       .innerJoin(cardToCategory, eq(cardToCategory.categoryId, category.id))
       .where(name ? ilike(category.name, `%${name}%`) : undefined)
-      .groupBy(category.id, category.name);
+      .groupBy(category.id, category.name)
+      .limit(10)
+      .orderBy(desc(count(cardToCategory.cardId)));
 
     return Response.json({
       categories: result,

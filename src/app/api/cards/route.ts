@@ -1,8 +1,8 @@
+import { and, desc, eq, inArray, ne, sql, SQL } from "drizzle-orm";
 import { db } from "@/db";
 import z from "zod";
 import { card, cardToCategory, category } from "@/db/schema";
 import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.schema";
-import { and, eq, inArray, ne, sql, SQL } from "drizzle-orm";
 import { NextRequest } from "next/server";
 import { createCardSchema } from "@/lib/validators/create-card.schema";
 
@@ -36,7 +36,8 @@ export const GET = async (request: NextRequest) => {
       .innerJoin(category, eq(category.id, cardToCategory.categoryId))
       .where(and(...filters))
       .limit(PAGE_SIZE)
-      .offset(offset);
+      .offset(offset)
+      .orderBy(desc(card.createdAt));
 
     const totalCountResult = await db
       .select({

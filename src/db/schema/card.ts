@@ -1,5 +1,12 @@
 import { relations, sql } from "drizzle-orm";
-import { pgTable, text, uuid, integer, check } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  uuid,
+  integer,
+  check,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { cardToCategory } from "./card-category";
 
 export const card = pgTable(
@@ -9,6 +16,7 @@ export const card = pgTable(
     question: text("question").notNull(),
     answer: text("answer").notNull(),
     knownCount: integer("known_count").notNull().default(0),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => [
     check(
