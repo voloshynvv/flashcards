@@ -28,7 +28,7 @@ export const CardItem = ({ card }: CardItemProps) => {
         <div className="flex flex-1 items-center self-stretch p-3">
           <div className="flex items-center gap-2">
             <Progress className="w-15" />
-            <p className="text-xs">0/{card.knownCount}</p>
+            <p className="text-xs">{card.knownCount}/5</p>
           </div>
         </div>
 

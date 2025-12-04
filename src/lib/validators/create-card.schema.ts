@@ -7,3 +7,4 @@ export const createCardSchema = z.object({
 });
 
 export type CreateCard = z.infer<typeof createCardSchema>;
+export type UpdateCard = Partial<CreateCard>;

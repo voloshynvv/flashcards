@@ -1,18 +1,14 @@
 "use client";
 
-import {
-  useSuspenseInfiniteQuery,
-  useInfiniteQuery,
-} from "@tanstack/react-query";
-
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
 import { CardsListFilters } from "./cards-list-filters";
 import { useFilters } from "../hooks/use-filters";
+import { cn } from "@/utils/cn";
 
 import { Empty } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
 import { CardItem } from "./card-item";
-import { cn } from "@/utils/cn";
 
 export const CardsList = () => {
   const { filters, updateFilters, resetFilters, filtersApplied } = useFilters();
@@ -61,13 +57,7 @@ export const CardsList = () => {
           description="Try adjusting your filters or adding more cards."
         />
       ) : (
-        <div
-          className={cn(
-            "flex flex-col gap-10 md:gap-12",
-            cardsQuery.isPlaceholderData &&
-              "pointer-events-none opacity-50 select-none",
-          )}
-        >
+        <div className={cn("flex flex-col gap-10 md:gap-12")}>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
             {cards.map((card) => (
               <CardItem key={card.id} card={card} />

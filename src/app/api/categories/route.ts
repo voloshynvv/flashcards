@@ -15,10 +15,9 @@ export const GET = async (request: NextRequest) => {
         count: count(cardToCategory.cardId),
       })
       .from(category)
-      .innerJoin(cardToCategory, eq(cardToCategory.categoryId, category.id))
+      .leftJoin(cardToCategory, eq(cardToCategory.categoryId, category.id))
       .where(name ? ilike(category.name, `%${name}%`) : undefined)
       .groupBy(category.id, category.name)
-      .limit(10)
       .orderBy(desc(count(cardToCategory.cardId)));
 
     return Response.json({

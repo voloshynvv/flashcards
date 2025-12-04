@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   type CardsFilters,
@@ -23,31 +23,30 @@ export const useFilters = () => {
     filters.categoryIds.length > 0 ||
     filters.hideMastered !== defaultFilters.hideMastered;
 
-  const updateFilters = (newFilters: CardsFilters) => {
-    const params = new URLSearchParams(searchParams);
+  const updateFilters = useCallback(
+    (newFilters: CardsFilters) => {
+      const params = new URLSearchParams(searchParams);
 
-    if (newFilters.hideMastered) {
-      params.set("hideMastered", "true");
-    } else {
-      params.delete("hideMastered");
-    }
+      if (newFilters.hideMastered) {
+        params.set("hideMastered", "true");
+      } else {
+        params.delete("hideMastered");
+      }
 
-    if (newFilters.categoryIds.length > 0) {
-      params.set("categoryIds", newFilters.categoryIds.join(","));
-    } else {
-      params.delete("categoryIds");
-    }
+      if (newFilters.categoryIds.length > 0) {
+        params.set("categoryIds", newFilters.categoryIds.join(","));
+      } else {
+        params.delete("categoryIds");
+      }
 
-    replaceUrl(`${pathname}?${params.toString()}`);
-  };
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [router, pathname, searchParams],
+  );
 
-  const replaceUrl = (url: string) => {
-    router.replace(url, { scroll: false });
-  };
-
-  const resetFilters = () => {
-    replaceUrl(pathname);
-  };
+  const resetFilters = useCallback(() => {
+    router.replace(pathname, { scroll: false });
+  }, [router, pathname]);
 
   return {
     filters,
