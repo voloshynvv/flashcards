@@ -1,7 +1,6 @@
-import { EllipsisVertical } from "lucide-react";
-import { Card } from "./types";
 import { Progress } from "@/components/ui/progress";
 import { CardItemMenu } from "./card-item-menu";
+import { Card } from "@/lib/queries/cards.query";
 
 interface CardItemProps {
   card: Card;
@@ -22,19 +21,19 @@ export const CardItem = ({ card }: CardItemProps) => {
       <div className="flex items-center divide-x">
         <div className="p-3">
           <p className="card border-r-3 border-b-3 px-3 py-1.5 text-xs">
-            Web Development
+            {card.category}
           </p>
         </div>
 
         <div className="flex flex-1 items-center self-stretch p-3">
           <div className="flex items-center gap-2">
             <Progress className="w-15" />
-            <p className="text-xs">0/5</p>
+            <p className="text-xs">0/{card.knownCount}</p>
           </div>
         </div>
 
         <div className="p-3">
-          <CardItemMenu />
+          <CardItemMenu card={card} />
         </div>
       </div>
     </article>

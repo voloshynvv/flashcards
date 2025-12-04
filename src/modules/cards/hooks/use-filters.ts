@@ -1,0 +1,40 @@
+import { useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  type CardsFilters,
+  cardsSearchParams,
+} from "@/lib/validators/cards-search-params.schema";
+
+export const useFilters = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const filters = useMemo(() => {
+    return cardsSearchParams.parse(Object.fromEntries(searchParams));
+  }, [searchParams]);
+
+  const updateFilters = (newFilters: CardsFilters) => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("page");
+
+    if (newFilters.hideMastered) {
+      params.set("hideMastered", "true");
+    } else {
+      params.delete("hideMastered");
+    }
+
+    if (newFilters.categoryIds.length > 0) {
+      params.set("categoryIds", newFilters.categoryIds.join(","));
+    } else {
+      params.delete("categoryIds");
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
+  return {
+    filters,
+    updateFilters,
+  };
+};
