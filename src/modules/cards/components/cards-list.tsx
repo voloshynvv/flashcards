@@ -35,6 +35,7 @@ export const CardsList = () => {
     <div>
       <div className="mb-6 md:mb-8">
         <CardsListFilters
+          key={filters.categoryIds.length}
           filters={filters}
           onChange={updateFilters}
           onResetFilters={resetFilters}
