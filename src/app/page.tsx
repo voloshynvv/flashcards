@@ -1,5 +1,1 @@
-const Page = () => {
-  return <div>Index page</div>;
-};
-
-export default Page;
+export { HomePage as default } from "@/modules/home/home.page";

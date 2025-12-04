@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { cardsInfiniteQueryOptions } from "../queries/cards.query";
 import { categoriesQueryOptions } from "../queries/categories.query";
 import { CreateCard } from "../validators/create-card.schema";
 
@@ -25,7 +24,9 @@ export const useCreateCard = () => {
   return useMutation({
     mutationFn: createCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries(cardsInfiniteQueryOptions());
+      await queryClient.invalidateQueries({
+        queryKey: ["cards"],
+      });
       await queryClient.invalidateQueries(categoriesQueryOptions());
     },
   });

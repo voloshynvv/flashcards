@@ -1,0 +1,23 @@
+import { db } from "@/db";
+import { card } from "@/db/schema";
+import { count, sql } from "drizzle-orm";
+
+export const GET = async () => {
+  try {
+    const [result] = await db
+      .select({
+        totalCards: count(card.id),
+        mastered: sql<number>`SUM(CASE WHEN ${card.knownCount} = 5 THEN 1 ELSE 0 END)`,
+        inProgress: sql<number>`SUM(CASE WHEN ${card.knownCount} > 0 AND ${card.knownCount} < 5 THEN 1 ELSE 0 END)`,
+        notStarted: sql<number>`SUM(CASE WHEN ${card.knownCount} = 0 THEN 1 ELSE 0 END)`,
+      })
+      .from(card);
+
+    return Response.json(result);
+  } catch {
+    return Response.json(
+      { error: "Failed to get a study stats" },
+      { status: 500 },
+    );
+  }
+};
