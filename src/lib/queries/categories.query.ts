@@ -8,7 +8,6 @@ export interface Category {
 
 export const getCategories = async (name: string) => {
   const params = new URLSearchParams();
-
   if (name) {
     params.append("name", name);
   }
@@ -27,6 +26,6 @@ export const getCategories = async (name: string) => {
 
 export const categoriesQueryOptions = (name = "") =>
   queryOptions({
-    queryKey: ["cards", { name }],
+    queryKey: ["categories", { name }],
     queryFn: () => getCategories(name),
   });

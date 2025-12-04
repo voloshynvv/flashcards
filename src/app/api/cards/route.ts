@@ -1,13 +1,16 @@
 import { db } from "@/db";
 import z from "zod";
 import { card, cardToCategory, category } from "@/db/schema";
-import { cardsSearchParams } from "@/lib/validators/cards-search-params.schema";
-import { and, eq, inArray, ne, SQL } from "drizzle-orm";
+import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.schema";
+import { and, eq, inArray, ne, sql, SQL } from "drizzle-orm";
 import { NextRequest } from "next/server";
+
+const PAGE_SIZE = 3;
 
 export const GET = async (request: NextRequest) => {
   const searchParams = Object.fromEntries(request.nextUrl.searchParams);
-  const { categoryIds, hideMastered } = cardsSearchParams.parse(searchParams);
+  const { categoryIds, hideMastered, page } =
+    cardsSearchParamsWithPage.parse(searchParams);
 
   const filters: SQL[] = [];
 
@@ -19,6 +22,8 @@ export const GET = async (request: NextRequest) => {
     filters.push(ne(card.knownCount, 5));
   }
 
+  const offset = page * PAGE_SIZE;
+
   try {
     const result = await db
       .select({
@@ -28,14 +33,28 @@ export const GET = async (request: NextRequest) => {
       .from(card)
       .innerJoin(cardToCategory, eq(card.id, cardToCategory.cardId))
       .innerJoin(category, eq(category.id, cardToCategory.categoryId))
+      .where(and(...filters))
+      .limit(PAGE_SIZE)
+      .offset(offset);
+
+    const totalCountResult = await db
+      .select({
+        count: sql<number>`count(*)`.mapWith(Number),
+      })
+      .from(card)
+      .innerJoin(cardToCategory, eq(card.id, cardToCategory.cardId))
+      .innerJoin(category, eq(category.id, cardToCategory.categoryId))
       .where(and(...filters));
+
+    const totalItems = totalCountResult[0].count;
+    const totalPages = Math.ceil(totalItems / PAGE_SIZE) - 1;
 
     const flattenedResult = result.map((item) => ({
       ...item.card,
       category: item.category,
     }));
 
-    return Response.json({ cards: flattenedResult });
+    return Response.json({ cards: flattenedResult, totalPages });
   } catch {
     return Response.json({ error: "Failed to fetch cards" }, { status: 500 });
   }

@@ -16,7 +16,6 @@ export const useFilters = () => {
 
   const updateFilters = (newFilters: CardsFilters) => {
     const params = new URLSearchParams(searchParams);
-    params.delete("page");
 
     if (newFilters.hideMastered) {
       params.set("hideMastered", "true");

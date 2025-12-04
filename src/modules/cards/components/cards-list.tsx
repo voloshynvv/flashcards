@@ -1,8 +1,8 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 
-import { cardsQueryOptions } from "@/lib/queries/cards.query";
+import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
 import { CardsListFilters } from "./cards-list-filters";
 import { useFilters } from "../hooks/use-filters";
 
@@ -13,14 +13,16 @@ import { CardItem } from "./card-item";
 export const CardsList = () => {
   const { filters, updateFilters } = useFilters();
 
-  const cardsQuery = useSuspenseQuery(
-    cardsQueryOptions({
+  const cardsQuery = useSuspenseInfiniteQuery(
+    cardsInfiniteQueryOptions({
       categoryIds: filters.categoryIds,
       hideMastered: filters.hideMastered,
     }),
   );
 
-  if (cardsQuery.data.length === 0) {
+  const cards = cardsQuery.data.pages.map((page) => page.cards).flat();
+
+  if (cards.length === 0) {
     return (
       <Empty
         title="No cards yet"
@@ -37,14 +39,21 @@ export const CardsList = () => {
 
       <div className="flex flex-col gap-10 md:gap-12">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
-          {cardsQuery.data.map((card) => (
+          {cards.map((card) => (
             <CardItem key={card.id} card={card} />
           ))}
         </div>
 
-        <Button className="mx-auto block" variant="secondary">
-          Load More
-        </Button>
+        {cardsQuery.hasNextPage && (
+          <Button
+            className="mx-auto block"
+            variant="secondary"
+            onClick={() => cardsQuery.fetchNextPage()}
+            disabled={!cardsQuery.hasNextPage || cardsQuery.isFetching}
+          >
+            Load More
+          </Button>
+        )}
       </div>
     </div>
   );

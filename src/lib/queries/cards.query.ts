@@ -1,4 +1,8 @@
-import { queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions } from "@tanstack/react-query";
+import {
+  CardsFilters,
+  CardsFiltersWithPage,
+} from "../validators/cards-search-params.schema";
 
 export interface Card {
   id: string;
@@ -8,21 +12,17 @@ export interface Card {
   category: string;
 }
 
-export interface CardsFilters {
-  categoryIds?: string[];
-  hideMastered?: boolean;
-  page?: number;
-}
-
-export const getCards = async (filters: CardsFilters = {}) => {
+export const getCards = async (filters: Partial<CardsFiltersWithPage> = {}) => {
   const params = new URLSearchParams();
 
   if (filters.categoryIds && filters.categoryIds.length > 0) {
     params.set("categoryIds", filters.categoryIds.join(","));
   }
-
   if (filters.hideMastered) {
     params.set("hideMastered", filters.hideMastered.toString());
+  }
+  if (filters.page) {
+    params.set("page", filters.page.toString());
   }
 
   const response = await fetch(`http://localhost:3000/api/cards?${params}`);
@@ -31,13 +31,23 @@ export const getCards = async (filters: CardsFilters = {}) => {
     throw new Error("failed to get cards");
   }
 
-  const data = (await response.json()) as { cards: Card[] };
-  return data.cards;
+  const data = (await response.json()) as { cards: Card[]; totalPages: number };
+  return data;
 };
 
-export const cardsQueryOptions = (filters: CardsFilters = {}) => {
-  return queryOptions({
-    queryKey: ["cards", { filters }],
-    queryFn: () => getCards(filters),
+export const cardsInfiniteQueryOptions = (
+  filters: Partial<CardsFilters> = {},
+) => {
+  return infiniteQueryOptions({
+    queryKey: ["cards", filters],
+    queryFn: ({ pageParam }) => getCards({ page: pageParam, ...filters }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      if (lastPage.totalPages <= lastPageParam) {
+        return undefined;
+      }
+
+      return lastPageParam + 1;
+    },
   });
 };

@@ -5,7 +5,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 
-import { cardsQueryOptions } from "@/lib/queries/cards.query";
+import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
 import { categoriesQueryOptions } from "@/lib/queries/categories.query";
 import { cardsSearchParams } from "@/lib/validators/cards-search-params.schema";
 
@@ -21,7 +21,7 @@ export const CardsPage = async ({ searchParams }: CardsPageProps) => {
   const params = cardsSearchParams.parse(await searchParams);
   const queryClient = new QueryClient();
 
-  queryClient.prefetchQuery(cardsQueryOptions(params));
+  queryClient.prefetchInfiniteQuery(cardsInfiniteQueryOptions(params));
   queryClient.prefetchQuery(categoriesQueryOptions());
 
   return (

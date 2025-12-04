@@ -25,8 +25,6 @@ export const CardsListFilters = ({
     new Set(filters.categoryIds),
   );
 
-  console.log(filters.categoryIds);
-
   const categoriesQuery = useSuspenseQuery(categoriesQueryOptions());
 
   const handleChangeCategory = (categoryId: string) => {

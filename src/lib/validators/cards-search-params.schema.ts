@@ -14,4 +14,9 @@ export const cardsSearchParams = z.object({
     .catch([]),
 });
 
+export const cardsSearchParamsWithPage = cardsSearchParams.extend({
+  page: z.coerce.number().min(0).catch(0),
+});
+
 export type CardsFilters = z.infer<typeof cardsSearchParams>;
+export type CardsFiltersWithPage = z.infer<typeof cardsSearchParamsWithPage>;
