@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { CardItem } from "./card-item";
 
 export const CardsList = () => {
-  const { filters, updateFilters } = useFilters();
+  const { filters, updateFilters, resetFilters, filtersApplied } = useFilters();
 
   const cardsQuery = useSuspenseInfiniteQuery(
     cardsInfiniteQueryOptions({
@@ -22,7 +22,7 @@ export const CardsList = () => {
 
   const cards = cardsQuery.data.pages.map((page) => page.cards).flat();
 
-  if (cards.length === 0) {
+  if (cards.length === 0 && !filtersApplied) {
     return (
       <Empty
         title="No cards yet"
@@ -34,27 +34,39 @@ export const CardsList = () => {
   return (
     <div>
       <div className="mb-6 md:mb-8">
-        <CardsListFilters filters={filters} onChange={updateFilters} />
+        <CardsListFilters
+          filters={filters}
+          onChange={updateFilters}
+          onResetFilters={resetFilters}
+          filtersApplied={filtersApplied}
+        />
       </div>
 
-      <div className="flex flex-col gap-10 md:gap-12">
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
-          {cards.map((card) => (
-            <CardItem key={card.id} card={card} />
-          ))}
+      {cards.length === 0 ? (
+        <Empty
+          title="No cards match your filters"
+          description="Try adjusting your filters or adding more cards."
+        />
+      ) : (
+        <div className="flex flex-col gap-10 md:gap-12">
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6">
+            {cards.map((card) => (
+              <CardItem key={card.id} card={card} />
+            ))}
+          </div>
+
+          {cardsQuery.hasNextPage && (
+            <Button
+              className="mx-auto block"
+              variant="secondary"
+              onClick={() => cardsQuery.fetchNextPage()}
+              disabled={!cardsQuery.hasNextPage || cardsQuery.isFetching}
+            >
+              Load More
+            </Button>
+          )}
         </div>
-
-        {cardsQuery.hasNextPage && (
-          <Button
-            className="mx-auto block"
-            variant="secondary"
-            onClick={() => cardsQuery.fetchNextPage()}
-            disabled={!cardsQuery.hasNextPage || cardsQuery.isFetching}
-          >
-            Load More
-          </Button>
-        )}
-      </div>
+      )}
     </div>
   );
 };

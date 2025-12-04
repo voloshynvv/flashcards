@@ -15,11 +15,15 @@ import { Label } from "@/components/ui/label";
 interface CardsListFiltersProps {
   filters: CardsFilters;
   onChange: (newFilters: CardsFilters) => void;
+  onResetFilters: () => void;
+  filtersApplied: boolean;
 }
 
 export const CardsListFilters = ({
   filters,
   onChange,
+  onResetFilters,
+  filtersApplied,
 }: CardsListFiltersProps) => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set(filters.categoryIds),
@@ -50,28 +54,36 @@ export const CardsListFilters = ({
 
   return (
     <div className="flex flex-wrap items-center gap-5">
-      <DropdownMenu
-        onOpenChange={handleOpenChange}
-        align="start"
-        trigger={
-          <Button variant="secondary" noShadow>
-            All Categories <ChevronDownIcon />
-          </Button>
-        }
-      >
-        {categoriesQuery.data.map((category) => (
-          <DropdownMenuCheckboxItem
-            onSelect={(e) => {
-              e.preventDefault();
-            }}
-            checked={selectedCategories.has(category.id)}
-            onCheckedChange={() => handleChangeCategory(category.id)}
-            key={category.id}
-          >
-            {category.name} ({category.count})
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenu>
+      <div className="relative">
+        <DropdownMenu
+          onOpenChange={handleOpenChange}
+          align="start"
+          trigger={
+            <Button variant="secondary" noShadow>
+              All Categories <ChevronDownIcon />
+            </Button>
+          }
+        >
+          {categoriesQuery.data.map((category) => (
+            <DropdownMenuCheckboxItem
+              onSelect={(e) => {
+                e.preventDefault();
+              }}
+              checked={selectedCategories.has(category.id)}
+              onCheckedChange={() => handleChangeCategory(category.id)}
+              key={category.id}
+            >
+              {category.name} ({category.count})
+            </DropdownMenuCheckboxItem>
+          ))}
+        </DropdownMenu>
+
+        {selectedCategories.size > 0 && (
+          <span className="absolute top-0 right-0 flex size-6 -translate-y-1/2 items-center justify-center rounded-full bg-yellow-500 text-xs">
+            {selectedCategories.size}
+          </span>
+        )}
+      </div>
 
       <div className="inline-flex items-center gap-2">
         <Checkbox
@@ -86,6 +98,16 @@ export const CardsListFilters = ({
         />
         <Label htmlFor="mastered">Hide Mastered</Label>
       </div>
+
+      {filtersApplied && (
+        <Button
+          variant="secondary"
+          onClick={onResetFilters}
+          className="ml-auto"
+        >
+          Reset
+        </Button>
+      )}
     </div>
   );
 };

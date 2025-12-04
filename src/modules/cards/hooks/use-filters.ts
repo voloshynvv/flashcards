@@ -5,6 +5,11 @@ import {
   cardsSearchParams,
 } from "@/lib/validators/cards-search-params.schema";
 
+const defaultFilters: CardsFilters = {
+  categoryIds: [],
+  hideMastered: false,
+};
+
 export const useFilters = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -13,6 +18,10 @@ export const useFilters = () => {
   const filters = useMemo(() => {
     return cardsSearchParams.parse(Object.fromEntries(searchParams));
   }, [searchParams]);
+
+  const filtersApplied =
+    filters.categoryIds.length > 0 ||
+    filters.hideMastered !== defaultFilters.hideMastered;
 
   const updateFilters = (newFilters: CardsFilters) => {
     const params = new URLSearchParams(searchParams);
@@ -32,8 +41,14 @@ export const useFilters = () => {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const resetFilters = () => {
+    router.replace(pathname);
+  };
+
   return {
     filters,
     updateFilters,
+    filtersApplied,
+    resetFilters,
   };
 };

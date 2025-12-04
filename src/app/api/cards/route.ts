@@ -5,7 +5,7 @@ import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.
 import { and, eq, inArray, ne, sql, SQL } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 12;
 
 export const GET = async (request: NextRequest) => {
   const searchParams = Object.fromEntries(request.nextUrl.searchParams);
