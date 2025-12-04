@@ -4,6 +4,7 @@ import { card, cardToCategory, category } from "@/db/schema";
 import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.schema";
 import { and, eq, inArray, ne, sql, SQL } from "drizzle-orm";
 import { NextRequest } from "next/server";
+import { createCardSchema } from "@/lib/validators/create-card.schema";
 
 const PAGE_SIZE = 12;
 
@@ -59,12 +60,6 @@ export const GET = async (request: NextRequest) => {
     return Response.json({ error: "Failed to fetch cards" }, { status: 500 });
   }
 };
-
-const createCardSchema = z.object({
-  question: z.string().min(1, { error: "Question is required." }),
-  answer: z.string().min(1, { error: "Answer is required." }),
-  category: z.string().min(1, { error: "Category is required." }),
-});
 
 export const POST = async (request: NextRequest) => {
   const body = await request.json();
