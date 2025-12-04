@@ -1,4 +1,4 @@
-import { infiniteQueryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, keepPreviousData } from "@tanstack/react-query";
 import {
   CardsFilters,
   CardsFiltersWithPage,
@@ -49,5 +49,6 @@ export const cardsInfiniteQueryOptions = (
 
       return lastPageParam + 1;
     },
+    placeholderData: keepPreviousData,
   });
 };

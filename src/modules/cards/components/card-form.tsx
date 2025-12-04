@@ -109,7 +109,7 @@ export const CardForm = ({ initialValues }: CreateCardFormProps) => {
             <Button type="submit">Update Card</Button>
           </div>
         ) : (
-          <Button type="submit">
+          <Button disabled={createCardMutation.isPending} type="submit">
             <CirclePlus />
             Create Card
           </Button>

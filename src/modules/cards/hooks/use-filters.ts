@@ -38,11 +38,15 @@ export const useFilters = () => {
       params.delete("categoryIds");
     }
 
-    router.replace(`${pathname}?${params.toString()}`);
+    replaceUrl(`${pathname}?${params.toString()}`);
+  };
+
+  const replaceUrl = (url: string) => {
+    router.replace(url, { scroll: false });
   };
 
   const resetFilters = () => {
-    router.replace(pathname);
+    replaceUrl(pathname);
   };
 
   return {

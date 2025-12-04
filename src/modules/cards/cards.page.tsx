@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import {
   dehydrate,
   HydrationBoundary,
@@ -11,7 +10,6 @@ import { cardsSearchParams } from "@/lib/validators/cards-search-params.schema";
 
 import { CardForm } from "./components/card-form";
 import { CardsList } from "./components/cards-list";
-import { CardsLoading } from "./cards.loading";
 
 interface CardsPageProps {
   searchParams: Promise<unknown>;
@@ -30,9 +28,7 @@ export const CardsPage = async ({ searchParams }: CardsPageProps) => {
         <CardForm />
 
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense fallback={<CardsLoading />}>
-            <CardsList />
-          </Suspense>
+          <CardsList />
         </HydrationBoundary>
       </div>
     </main>
