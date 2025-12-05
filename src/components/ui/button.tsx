@@ -28,6 +28,7 @@ export const Button = ({
         "inline-flex h-11 w-fit items-center justify-center gap-2 rounded-full border transition-[box-shadow,background-color] disabled:pointer-events-none disabled:opacity-50 [&>svg]:size-4",
         !noShadow &&
           "shadow-border-sm hover:shadow-border-lg focus-visible:shadow-border-lg! focus-visible:shadow-ring outline-none",
+        noShadow && variant === "secondary" && "hover:bg-neutral-100",
         variants[variant],
         className,
       )}

@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 interface CardsListFiltersProps {
   filters: CardsFilters;
   onChange: (newFilters: CardsFilters) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const Filters = ({
@@ -101,7 +101,7 @@ export const Filters = ({
         <Label htmlFor="mastered">Hide Mastered</Label>
       </div>
 
-      <div className="ml-auto">{children}</div>
+      {children && <div className="ml-auto">{children}</div>}
     </div>
   );
 };

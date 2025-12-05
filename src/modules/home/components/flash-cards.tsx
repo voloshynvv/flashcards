@@ -138,12 +138,7 @@ export const FlashCards = () => {
   return (
     <div className="divide-y rounded-2xl border bg-neutral-50">
       <div className="px-4 py-3 md:p-5">
-        <Filters filters={filters} onChange={handleChangeFilters}>
-          <Button variant="secondary" noShadow onClick={() => {}}>
-            <ShuffleIcon />
-            Shuffle
-          </Button>
-        </Filters>
+        <Filters filters={filters} onChange={handleChangeFilters} />
       </div>
 
       {cards.length === 0 && !filtersApplied && <NoCardsView />}
