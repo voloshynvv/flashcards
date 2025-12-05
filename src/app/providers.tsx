@@ -8,6 +8,8 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import { ToasterProvider } from "@/components/ui/toast";
+
 function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
@@ -60,6 +62,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       {children}
+
+      <ToasterProvider />
+
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

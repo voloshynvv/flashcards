@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FormField } from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { createToast } from "@/components/ui/toast";
 
 export const formSchema = z.object({
   question: z.string().min(1, { error: "Please enter a question." }),
@@ -48,8 +49,8 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
       updateCardMutation.mutate(
         { id: initialValues.id, data },
         {
-          onSuccess: () => {},
-          onSettled: () => {
+          onSuccess: () => {
+            createToast("Card updated successfully.");
             form.reset();
             onSubmit?.();
           },
@@ -57,8 +58,8 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
       );
     } else {
       createCardMutation.mutate(data, {
-        onSuccess: () => {},
-        onSettled: () => {
+        onSuccess: () => {
+          createToast("Card created successfully.");
           form.reset();
           onSubmit?.();
         },
@@ -66,7 +67,7 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
     }
   });
 
-  const hasError = createCardMutation.isError;
+  const hasError = createCardMutation.isError || updateCardMutation.isError;
 
   return (
     <form onSubmit={handleSubmit}>

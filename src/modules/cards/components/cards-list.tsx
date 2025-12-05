@@ -7,6 +7,7 @@ import { CardsListFilters } from "./cards-list-filters";
 import { useFilters } from "../hooks/use-filters";
 import { cn } from "@/utils/cn";
 import { useDeleteCard } from "@/lib/mutations/delete-card.mutation";
+import { createToast } from "@/components/ui/toast";
 
 import { Empty } from "@/components/ui/empty";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,12 @@ export const CardsList = () => {
 
     deleteCard.mutate(selectedCardId, {
       onSuccess: () => {
+        createToast("Card deleted.");
+      },
+      onError: () => {
+        createToast("Something went wrong.");
+      },
+      onSettled: () => {
         handleCloseDialog();
       },
     });
@@ -75,7 +82,6 @@ export const CardsList = () => {
           filtersApplied={filtersApplied}
         />
       </div>
-      {activeDialog}
 
       {cards.length === 0 ? (
         <Empty
