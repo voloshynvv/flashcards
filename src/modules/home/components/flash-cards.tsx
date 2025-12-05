@@ -146,7 +146,9 @@ export const FlashCards = () => {
       {cards.length !== 0 && (
         <>
           <div className="flex flex-col gap-5 px-4 py-6 md:p-5">
-            <FlashCard card={currentCard} />
+            <div>
+              <FlashCard card={currentCard} />
+            </div>
 
             <div className="flex flex-col items-center justify-center gap-2.5 md:flex-row md:gap-5">
               <Button

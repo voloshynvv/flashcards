@@ -93,7 +93,8 @@ export const PATCH = async (
     return new Response(null, {
       status: 204,
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     return Response.json({ error: "Failed to update card" }, { status: 500 });
   }
 };
