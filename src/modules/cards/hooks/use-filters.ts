@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
   type CardsFilters,
   cardsSearchParams,
@@ -11,7 +11,6 @@ const defaultFilters: CardsFilters = {
 };
 
 export const useFilters = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -39,14 +38,14 @@ export const useFilters = () => {
         params.delete("categoryIds");
       }
 
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      window.history.pushState(null, "", `?${params.toString()}`);
     },
-    [router, pathname, searchParams],
+    [searchParams],
   );
 
   const resetFilters = useCallback(() => {
-    router.replace(pathname, { scroll: false });
-  }, [router, pathname]);
+    window.history.pushState(null, "", pathname);
+  }, [pathname]);
 
   return {
     filters,
