@@ -24,7 +24,7 @@ export const StudyStats = () => {
   const { totalCards, mastered, inProgress, notStarted } = data;
 
   return (
-    <aside className="shadow-border-md flex flex-col gap-2 rounded-2xl border bg-neutral-50 px-4 py-5 lg:p-6">
+    <aside className="shadow-border-md sticky top-4 flex flex-col gap-2 rounded-2xl border bg-neutral-50 px-4 py-5 lg:p-6">
       <h2 className="mb-2 text-2xl">Study Statistics</h2>
 
       <div className="flex flex-col gap-4 md:gap-5">

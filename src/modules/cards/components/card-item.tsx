@@ -1,9 +1,10 @@
-import { Progress } from "@/components/ui/progress";
-import { Card } from "@/lib/queries/cards.query";
 import { EditIcon, EllipsisVerticalIcon, Trash2Icon } from "lucide-react";
+import { Card } from "@/lib/queries/cards.query";
 
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { IconButton } from "@/components/ui/icon-button";
+import { CardProgress } from "@/components/card-progress";
+import { Tag } from "@/components/ui/tag";
 
 interface CardItemProps {
   card: Card;
@@ -28,17 +29,14 @@ export const CardItem = ({ card, onActionClick }: CardItemProps) => {
       </div>
 
       <div className="flex items-center divide-x">
-        <div className="p-3">
-          <p className="card border-r-3 border-b-3 px-3 py-1.5 text-xs">
+        <div className="flex p-3">
+          <Tag className="inline-block max-w-32.5 truncate">
             {card.category}
-          </p>
+          </Tag>
         </div>
 
         <div className="flex flex-1 items-center self-stretch p-3">
-          <div className="flex items-center gap-2">
-            <Progress className="w-15" />
-            <p className="text-xs">{card.knownCount}/5</p>
-          </div>
+          <CardProgress value={card.knownCount} />
         </div>
 
         <div className="p-3">

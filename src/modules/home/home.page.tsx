@@ -1,12 +1,15 @@
 import { QueryClient } from "@tanstack/react-query";
+import { statisticsQueryOptions } from "@/lib/queries/statistics.query";
+import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
+
 import { FlashCards } from "./components/flash-cards";
 import { StudyStats } from "./components/study-stats";
-import { statisticsQueryOptions } from "@/lib/queries/statistics.query";
 
 export const HomePage = () => {
   const queryClient = new QueryClient();
 
   queryClient.prefetchQuery(statisticsQueryOptions());
+  queryClient.prefetchInfiniteQuery(cardsInfiniteQueryOptions());
 
   return (
     <main className="p-4 pb-10 md:p-8 md:pb-16">

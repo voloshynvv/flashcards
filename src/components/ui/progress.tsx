@@ -5,8 +5,12 @@ import { cn } from "@/utils/cn";
 export const Progress = ({
   className,
   value,
+  max = 100,
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) => {
+  const percentage =
+    max && max > 0 ? Math.min(100, ((value ?? 0) / max) * 100) : 0;
+
   return (
     <ProgressPrimitive.Root
       className={cn(
@@ -16,8 +20,8 @@ export const Progress = ({
       {...props}
     >
       <ProgressPrimitive.Indicator
-        className="bg-primary h-full w-full flex-1 transition-all"
-        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+        className="h-full w-full flex-1 bg-neutral-900 transition-all"
+        style={{ transform: `translateX(-${100 - percentage}%)` }}
       />
     </ProgressPrimitive.Root>
   );

@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { cardsInfiniteQueryOptions } from "../queries/cards.query";
 import { categoriesQueryOptions } from "../queries/categories.query";
 
 export const deleteCard = async (id: string) => {
@@ -20,7 +19,7 @@ export const useDeleteCard = () => {
   return useMutation({
     mutationFn: deleteCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries(cardsInfiniteQueryOptions());
+      await queryClient.invalidateQueries({ queryKey: ["cards"] });
       await queryClient.invalidateQueries(categoriesQueryOptions());
     },
   });

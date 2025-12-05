@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Card, cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
-import { CardsListFilters } from "./cards-list-filters";
 import { useFilters } from "../hooks/use-filters";
 import { cn } from "@/utils/cn";
 import { useDeleteCard } from "@/lib/mutations/delete-card.mutation";
@@ -14,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { CardItem } from "./card-item";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { UpdateCardDialog } from "./update-card-dialog";
+import { Filters } from "@/components/filters";
 
 export const CardsList = () => {
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
@@ -74,13 +74,17 @@ export const CardsList = () => {
   return (
     <div>
       <div className="mb-6 md:mb-8">
-        <CardsListFilters
+        <Filters
           key={filters.categoryIds.length}
           filters={filters}
           onChange={updateFilters}
-          onResetFilters={resetFilters}
-          filtersApplied={filtersApplied}
-        />
+        >
+          {filtersApplied && (
+            <Button variant="secondary" onClick={resetFilters}>
+              Reset
+            </Button>
+          )}
+        </Filters>
       </div>
 
       {cards.length === 0 ? (

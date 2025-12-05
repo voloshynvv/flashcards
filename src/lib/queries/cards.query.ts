@@ -8,8 +8,15 @@ export interface Card {
   id: string;
   question: string;
   answer: string;
-  knownCount: boolean;
+  knownCount: number;
   category: string;
+}
+
+interface GetCardsResponse {
+  cards: Card[];
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
 }
 
 export const getCards = async (filters: Partial<CardsFiltersWithPage> = {}) => {
@@ -31,7 +38,7 @@ export const getCards = async (filters: Partial<CardsFiltersWithPage> = {}) => {
     throw new Error("failed to get cards");
   }
 
-  const data = (await response.json()) as { cards: Card[]; totalPages: number };
+  const data = (await response.json()) as GetCardsResponse;
   return data;
 };
 

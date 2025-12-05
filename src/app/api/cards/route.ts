@@ -56,7 +56,12 @@ export const GET = async (request: NextRequest) => {
       category: item.category,
     }));
 
-    return Response.json({ cards: flattenedResult, totalPages });
+    return Response.json({
+      cards: flattenedResult,
+      totalPages,
+      totalItems,
+      itemsPerPage: PAGE_SIZE,
+    });
   } catch {
     return Response.json({ error: "Failed to fetch cards" }, { status: 500 });
   }

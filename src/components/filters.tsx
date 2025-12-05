@@ -4,26 +4,24 @@ import { ChevronDownIcon } from "lucide-react";
 import { categoriesQueryOptions } from "@/lib/queries/categories.query";
 import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface CardsListFiltersProps {
   filters: CardsFilters;
   onChange: (newFilters: CardsFilters) => void;
-  onResetFilters: () => void;
-  filtersApplied: boolean;
+  children: React.ReactNode;
 }
 
-export const CardsListFilters = ({
+export const Filters = ({
   filters,
   onChange,
-  onResetFilters,
-  filtersApplied,
+  children,
 }: CardsListFiltersProps) => {
   const [selectedCategories, setSelectedCategories] = useState<Set<string>>(
     new Set(filters.categoryIds),
@@ -99,15 +97,7 @@ export const CardsListFilters = ({
         <Label htmlFor="mastered">Hide Mastered</Label>
       </div>
 
-      {filtersApplied && (
-        <Button
-          variant="secondary"
-          onClick={onResetFilters}
-          className="ml-auto"
-        >
-          Reset
-        </Button>
-      )}
+      <div className="ml-auto">{children}</div>
     </div>
   );
 };
