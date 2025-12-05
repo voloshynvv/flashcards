@@ -17,6 +17,7 @@ export const createToast = (message: React.ReactNode) => {
     {
       className: "opacity-50",
       style: {
+        maxWidth: "100%",
         background: "var(--color-neutral-50",
         boxShadow: "none",
         border: "1px solid var(--color-border)",
@@ -32,7 +33,7 @@ export const ToasterProvider = () => {
       containerStyle={{
         bottom: 40,
       }}
-      position="bottom-right"
+      position="top-center"
     />
   );
 };

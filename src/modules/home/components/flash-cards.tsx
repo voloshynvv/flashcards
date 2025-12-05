@@ -17,6 +17,9 @@ import { Button } from "@/components/ui/button";
 import { FlashCard } from "./flash-card";
 import { Filters } from "@/components/filters";
 import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
+import { useLearnCard } from "@/lib/mutations/learn-card.mutation";
+import { createToast } from "@/components/ui/toast";
+import { useResetProgress } from "@/lib/mutations/reset-progress.mutation";
 
 const defaultFilters = {
   categoryIds: [],
@@ -43,6 +46,9 @@ export const FlashCards = () => {
         };
       },
     });
+
+  const learnCard = useLearnCard();
+  const resetProgress = useResetProgress();
 
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>Error...</div>;
@@ -83,6 +89,47 @@ export const FlashCards = () => {
     }
   };
 
+  const handleLearnCard = () => {
+    learnCard.mutate(currentCard.id, {
+      onSuccess: () => {
+        createToast("🎉 Great job! You’ve learned this card!");
+
+        setTimeout(() => {
+          // setStep(step + 1);
+        }, 200);
+      },
+      onError: () => {
+        createToast("😅 Hmm, something went wrong. Give it another try!");
+      },
+    });
+  };
+
+  const handleResetProgress = () => {
+    if (currentCard.knownCount === 0) {
+      createToast(
+        "💡 You haven’t started learning this card yet. Let’s give it a go!",
+      );
+      return;
+    }
+
+    resetProgress.mutate(currentCard.id, {
+      onSuccess: () => {
+        createToast(
+          "🔄 All set! Progress has been reset. Ready to start fresh?",
+        );
+
+        setTimeout(() => {
+          // setStep(step + 1);
+        }, 200);
+      },
+      onError: () => {
+        createToast(
+          "😕 Oops! Couldn’t reset the progress. Try again in a moment.",
+        );
+      },
+    });
+  };
+
   return (
     <div className="divide-y rounded-2xl border bg-neutral-50">
       <div className="px-4 py-3 md:p-5">
@@ -102,15 +149,20 @@ export const FlashCards = () => {
             <FlashCard card={currentCard} />
 
             <div className="flex flex-col items-center justify-center gap-2.5 md:flex-row md:gap-5">
-              <Button className="w-full md:w-fit" disabled={mastered}>
+              <Button
+                className="w-full md:w-fit"
+                onClick={handleLearnCard}
+                disabled={mastered || learnCard.isPending}
+              >
                 <CheckCircleIcon />
                 {mastered ? "Already Mastered" : "I Know This"}
               </Button>
 
               <Button
-                onClick={() => {}}
+                onClick={handleResetProgress}
                 className="w-full md:w-fit"
                 variant="secondary"
+                disabled={resetProgress.isPending}
               >
                 <RotateCcwIcon />
                 Reset Progress
