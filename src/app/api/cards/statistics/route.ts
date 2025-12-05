@@ -13,7 +13,12 @@ export const GET = async () => {
       })
       .from(card);
 
-    return Response.json(result);
+    return Response.json({
+      totalCards: result.totalCards,
+      mastered: result.mastered ?? 0,
+      inProgress: result.inProgress ?? 0,
+      notStarted: result.notStarted ?? 0,
+    });
   } catch {
     return Response.json(
       { error: "Failed to get a study stats" },

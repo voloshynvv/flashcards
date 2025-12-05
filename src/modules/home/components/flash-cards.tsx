@@ -20,6 +20,7 @@ import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
 import { useLearnCard } from "@/lib/mutations/learn-card.mutation";
 import { createToast } from "@/components/ui/toast";
 import { useResetProgress } from "@/lib/mutations/reset-progress.mutation";
+import { Loader } from "@/components/ui/loader";
 
 const defaultFilters = {
   categoryIds: [],
@@ -50,8 +51,12 @@ export const FlashCards = () => {
   const learnCard = useLearnCard();
   const resetProgress = useResetProgress();
 
-  if (isPending) return <div>Loading...</div>;
-  if (isError) return <div>Error...</div>;
+  if (isPending) {
+    return <Loader className="size-8" />;
+  }
+  if (isError) {
+    return <p>Couldn’t load your flash cards. Please try again later.</p>;
+  }
 
   const { cards, currentPage, itemsPerPage, totalItems } = data;
 

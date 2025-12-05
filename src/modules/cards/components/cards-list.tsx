@@ -14,6 +14,7 @@ import { CardItem } from "./card-item";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { UpdateCardDialog } from "./update-card-dialog";
 import { Filters } from "@/components/filters";
+import { Loader } from "@/components/ui/loader";
 
 export const CardsList = () => {
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
@@ -52,11 +53,16 @@ export const CardsList = () => {
   };
 
   if (cardsQuery.isPending) {
-    return <p>Pending...</p>;
+    return <Loader className="size-8" />;
   }
 
   if (cardsQuery.isError) {
-    return <p>Error...</p>;
+    return (
+      <Empty
+        title="Something went wrong"
+        description="Couldn’t load your flash cards. Please try again later."
+      />
+    );
   }
 
   const cards = cardsQuery.data?.pages.map((page) => page.cards).flat();

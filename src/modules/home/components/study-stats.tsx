@@ -9,16 +9,17 @@ import {
   LucideIcon,
   Package2Icon,
 } from "lucide-react";
+import { StudyStatsLoading } from "./study-stats-loading";
 
 export const StudyStats = () => {
   const { data, isPending, isError } = useQuery(statisticsQueryOptions());
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <StudyStatsLoading />;
   }
 
   if (isError) {
-    return <div>Error fetching data</div>;
+    return <p>Couldn’t load your study statistics. Please try again later.</p>;
   }
 
   const { totalCards, mastered, inProgress, notStarted } = data;

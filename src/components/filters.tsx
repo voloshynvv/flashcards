@@ -57,7 +57,11 @@ export const Filters = ({
           onOpenChange={handleOpenChange}
           align="start"
           trigger={
-            <Button variant="secondary" noShadow>
+            <Button
+              variant="secondary"
+              disabled={categoriesQuery.data.length === 0}
+              noShadow
+            >
               All Categories <ChevronDownIcon />
             </Button>
           }
