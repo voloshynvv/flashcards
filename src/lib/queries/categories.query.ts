@@ -12,9 +12,7 @@ export const getCategories = async (name: string) => {
     params.append("name", name);
   }
 
-  const response = await fetch(
-    `http://localhost:3000/api/categories?${params}`,
-  );
+  const response = await fetch(`/api/categories?${params}`);
 
   if (!response.ok) {
     throw new Error("failed to get categories");

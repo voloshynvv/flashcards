@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { categoriesQueryOptions } from "../queries/categories.query";
 
 export const deleteCard = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/api/cards/${id}`, {
+  const response = await fetch(`/api/cards/${id}`, {
     method: "DELETE",
   });
 

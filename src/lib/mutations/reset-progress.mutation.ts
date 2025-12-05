@@ -1,12 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const resetProgress = async (id: string) => {
-  const response = await fetch(
-    `http://localhost:3000/api/cards/${id}/reset-progress`,
-    {
-      method: "POST",
-    },
-  );
+  const response = await fetch(`/api/cards/${id}/reset-progress`, {
+    method: "POST",
+  });
 
   if (!response.ok) {
     throw new Error(`failed to reset progress for card with id ${id}`);

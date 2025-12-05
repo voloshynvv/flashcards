@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const learnCard = async (id: string) => {
-  const response = await fetch(`http://localhost:3000/api/cards/${id}/know`, {
+  const response = await fetch(`/api/cards/${id}/know`, {
     method: "POST",
   });
 

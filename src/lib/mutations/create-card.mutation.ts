@@ -3,7 +3,7 @@ import { categoriesQueryOptions } from "../queries/categories.query";
 import { CreateCard } from "../validators/create-card.schema";
 
 export const createCard = async (data: CreateCard) => {
-  const response = await fetch(`http://localhost:3000/api/cards`, {
+  const response = await fetch(`/api/cards`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

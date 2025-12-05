@@ -4,7 +4,7 @@ import { categoriesQueryOptions } from "../queries/categories.query";
 import { UpdateCard } from "../validators/create-card.schema";
 
 export const updateCard = async (id: string, data: UpdateCard) => {
-  const response = await fetch(`http://localhost:3000/api/cards/${id}`, {
+  const response = await fetch(`/api/cards/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

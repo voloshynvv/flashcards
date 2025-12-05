@@ -32,7 +32,7 @@ export const getCards = async (filters: Partial<CardsFiltersWithPage> = {}) => {
     params.set("page", filters.page.toString());
   }
 
-  const response = await fetch(`http://localhost:3000/api/cards?${params}`);
+  const response = await fetch(`/api/cards?${params}`);
 
   if (!response.ok) {
     throw new Error("failed to get cards");

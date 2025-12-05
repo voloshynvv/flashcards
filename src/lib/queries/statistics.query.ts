@@ -8,7 +8,7 @@ interface GetStatisticsResponse {
 }
 
 export const getStatistics = async () => {
-  const response = await fetch(`http://localhost:3000/api/cards/statistics`);
+  const response = await fetch(`/api/cards/statistics`);
 
   if (!response.ok) {
     throw new Error("failed to get stats");
