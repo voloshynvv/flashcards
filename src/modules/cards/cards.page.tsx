@@ -10,6 +10,7 @@ import { cardsSearchParams } from "@/lib/validators/cards-search-params.schema";
 
 import { CardForm } from "./components/card-form";
 import { CardsList } from "./components/cards-list";
+import { CreateUser } from "./components/create-user";
 
 interface CardsPageProps {
   searchParams: Promise<unknown>;
@@ -26,6 +27,7 @@ export const CardsPage = async ({ searchParams }: CardsPageProps) => {
     <main className="p-4 pb-10 md:p-8 md:pb-16">
       <div className="mx-auto flex max-w-310 flex-col gap-10 md:gap-12">
         <div className="shadow-border-lg rounded-2xl border bg-neutral-50 p-5 md:p-6 lg:p-8">
+          <CreateUser />
           <CardForm />
         </div>
 

@@ -1,13 +1,15 @@
-import { NextRequest } from "next/server";
-import { count, desc, eq, ilike } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { cardToCategory, category } from "@/db/schema";
+import { card, cardToCategory, category } from "@/db/schema";
+import { getCurrentUser } from "@/lib/session";
 
-export const GET = async (request: NextRequest) => {
-  const searchParams = request.nextUrl.searchParams;
-  const name = searchParams.get("name");
-
+export const GET = async () => {
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const result = await db
       .select({
         id: category.id,
@@ -16,7 +18,8 @@ export const GET = async (request: NextRequest) => {
       })
       .from(category)
       .leftJoin(cardToCategory, eq(cardToCategory.categoryId, category.id))
-      .where(name ? ilike(category.name, `%${name}%`) : undefined)
+      .leftJoin(card, eq(card.id, cardToCategory.cardId))
+      .where(eq(card.userId, currentUser.id))
       .groupBy(category.id, category.name)
       .orderBy(desc(count(cardToCategory.cardId)));
 

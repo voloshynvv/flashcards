@@ -5,6 +5,7 @@ import { card, cardToCategory, category } from "@/db/schema";
 import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.schema";
 import { NextRequest } from "next/server";
 import { createCardSchema } from "@/lib/validators/create-card.schema";
+import { getCurrentUser } from "@/lib/session";
 
 const PAGE_SIZE = 12;
 
@@ -26,6 +27,11 @@ export const GET = async (request: NextRequest) => {
   const offset = page * PAGE_SIZE;
 
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const result = await db
       .select({
         card: card,
@@ -34,7 +40,7 @@ export const GET = async (request: NextRequest) => {
       .from(card)
       .innerJoin(cardToCategory, eq(card.id, cardToCategory.cardId))
       .innerJoin(category, eq(category.id, cardToCategory.categoryId))
-      .where(and(...filters))
+      .where(and(...filters, eq(card.userId, currentUser.id)))
       .limit(PAGE_SIZE)
       .offset(offset)
       .orderBy(desc(card.createdAt));
@@ -46,7 +52,7 @@ export const GET = async (request: NextRequest) => {
       .from(card)
       .innerJoin(cardToCategory, eq(card.id, cardToCategory.cardId))
       .innerJoin(category, eq(category.id, cardToCategory.categoryId))
-      .where(and(...filters));
+      .where(and(...filters, eq(card.userId, currentUser.id)));
 
     const totalItems = totalCountResult[0].count;
     const totalPages = Math.ceil(totalItems / PAGE_SIZE) - 1;
@@ -84,12 +90,18 @@ export const POST = async (request: NextRequest) => {
   const { data } = validatedBody;
 
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await db.transaction(async (tx) => {
       const [newCard] = await tx
         .insert(card)
         .values({
           answer: data.answer,
           question: data.question,
+          userId: currentUser.id,
         })
         .returning({ id: card.id });
 
@@ -119,7 +131,8 @@ export const POST = async (request: NextRequest) => {
     return Response.json({
       message: "Card created successfully",
     });
-  } catch {
+  } catch (e) {
+    console.log(e);
     return Response.json(
       { error: "Failed to create a new card" },
       { status: 500 },

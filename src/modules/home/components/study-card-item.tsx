@@ -8,11 +8,11 @@ import { Star } from "./star";
 import { CardProgress } from "@/components/card-progress";
 import { Tag } from "@/components/ui/tag";
 
-interface FlashCardProps {
+interface StudyCardItemProps {
   card: Card;
 }
 
-export const FlashCard = ({ card }: FlashCardProps) => {
+export const StudyCardItem = ({ card }: StudyCardItemProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const handleFlip = () => {
