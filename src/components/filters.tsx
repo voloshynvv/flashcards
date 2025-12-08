@@ -14,7 +14,9 @@ interface FiltersProps {
 }
 
 export const Filters = ({ filters, onChange, children }: FiltersProps) => {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    filters.categoryIds,
+  );
   const categoriesQuery = useQuery(categoriesQueryOptions());
 
   return (

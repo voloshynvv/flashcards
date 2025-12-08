@@ -105,9 +105,13 @@ export const POST = async (request: NextRequest) => {
         })
         .returning({ id: card.id });
 
-      const existingCategory = await db.query.category.findFirst({
+      const existingCategory = await tx.query.category.findFirst({
         columns: { id: true },
-        where: (category, { eq }) => eq(category.name, data.category),
+        where: (category, { eq, and }) =>
+          and(
+            eq(category.name, data.category),
+            eq(category.userId, currentUser.id),
+          ),
       });
 
       let categoryId: string;
@@ -117,21 +121,23 @@ export const POST = async (request: NextRequest) => {
       } else {
         const [newCategory] = await tx
           .insert(category)
-          .values({ name: data.category })
+          .values({ name: data.category, userId: currentUser.id })
           .returning({ id: category.id });
 
         categoryId = newCategory.id;
       }
 
-      await tx
-        .insert(cardToCategory)
-        .values({ categoryId, cardId: newCard.id });
+      await tx.insert(cardToCategory).values({
+        categoryId,
+        cardId: newCard.id,
+      });
     });
 
     return Response.json({
       message: "Card created successfully",
     });
   } catch (e) {
+    console.log(e);
     return Response.json(
       { error: "Failed to create a new card" },
       { status: 500 },

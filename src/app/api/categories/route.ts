@@ -1,4 +1,4 @@
-import { count, desc, eq } from "drizzle-orm";
+import { and, count, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { card, cardToCategory, category } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
@@ -18,8 +18,14 @@ export const GET = async () => {
       })
       .from(category)
       .leftJoin(cardToCategory, eq(cardToCategory.categoryId, category.id))
-      .leftJoin(card, eq(card.id, cardToCategory.cardId))
-      .where(eq(card.userId, currentUser.id))
+      .leftJoin(
+        card,
+        and(
+          eq(card.id, cardToCategory.cardId),
+          eq(card.userId, currentUser.id),
+        ),
+      )
+      .where(eq(category.userId, currentUser.id))
       .groupBy(category.id, category.name)
       .orderBy(desc(count(cardToCategory.cardId)));
 

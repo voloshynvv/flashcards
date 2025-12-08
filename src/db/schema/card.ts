@@ -30,6 +30,10 @@ export const card = pgTable(
   ],
 );
 
-export const cardRelations = relations(card, ({ many }) => ({
+export const cardRelations = relations(card, ({ many, one }) => ({
   cardToCategory: many(cardToCategory),
+  user: one(user, {
+    fields: [card.userId],
+    references: [user.id],
+  }),
 }));

@@ -29,7 +29,7 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
   const id = useId();
 
   const form = useForm({
-    defaultValues: {
+    values: {
       question: initialValues?.question ?? "",
       answer: initialValues?.answer ?? "",
       category: initialValues?.category ?? "",

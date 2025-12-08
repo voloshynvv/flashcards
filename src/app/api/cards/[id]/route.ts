@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { card, cardToCategory, category } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
@@ -61,7 +61,12 @@ export const PATCH = async (
       const [categoryRecord] = await tx
         .select()
         .from(category)
-        .where(eq(category.name, data.category));
+        .where(
+          and(
+            eq(category.name, data.category),
+            eq(category.userId, currentUser.id),
+          ),
+        );
 
       let newCategoryId: string;
 
@@ -70,7 +75,7 @@ export const PATCH = async (
       } else {
         const [createdCategory] = await tx
           .insert(category)
-          .values({ name: data.category })
+          .values({ name: data.category, userId: currentUser.id })
           .returning();
 
         newCategoryId = createdCategory.id;
@@ -110,7 +115,14 @@ export const DELETE = async (
   const { id } = await ctx.params;
 
   try {
-    await db.delete(card).where(eq(card.id, id));
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    await db
+      .delete(card)
+      .where(and(eq(card.id, id), eq(card.userId, currentUser.id)));
 
     return Response.json(
       { message: "Card deleted successfully" },

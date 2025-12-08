@@ -19,8 +19,7 @@ import { Loader } from "@/components/ui/loader";
 export const CardsList = () => {
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-  const { filters, filtersKey, updateFilters, resetFilters, filtersApplied } =
-    useFilters();
+  const { filters, updateFilters, resetFilters, filtersApplied } = useFilters();
 
   const deleteCard = useDeleteCard();
 
@@ -49,8 +48,10 @@ export const CardsList = () => {
   const selectedCard = cards.find((card) => card.id === selectedCardId);
 
   const handleCloseDialog = () => {
-    setActiveDialog(null);
-    setSelectedCardId(null);
+    setTimeout(() => {
+      setActiveDialog(null);
+      setSelectedCardId(null);
+    }, 200);
   };
 
   const handleConfirmDelete = () => {
@@ -83,7 +84,11 @@ export const CardsList = () => {
   return (
     <div>
       <div className="mb-6 md:mb-8">
-        <Filters key={filtersKey} filters={filters} onChange={updateFilters}>
+        <Filters
+          key={filtersApplied ? "with-filters" : "without-filters"}
+          filters={filters}
+          onChange={updateFilters}
+        >
           {filtersApplied && (
             <Button variant="secondary" onClick={resetFilters}>
               Reset
@@ -110,26 +115,6 @@ export const CardsList = () => {
                 }}
               />
             ))}
-
-            <AlertDialog
-              open={activeDialog === "delete"}
-              onOpenChange={handleCloseDialog}
-              title="Delete this card?"
-              description="This action can’t be undone."
-              isPending={deleteCard.isPending}
-              actionText="Delete Card"
-              onConfirm={(e) => {
-                e.preventDefault();
-                handleConfirmDelete();
-              }}
-            />
-
-            <UpdateCardDialog
-              open={activeDialog === "update"}
-              onOpenChange={handleCloseDialog}
-              onSubmit={handleCloseDialog}
-              card={selectedCard as Card}
-            />
           </div>
 
           {cardsQuery.hasNextPage && (
@@ -144,6 +129,26 @@ export const CardsList = () => {
           )}
         </div>
       )}
+
+      <AlertDialog
+        open={activeDialog === "delete"}
+        onOpenChange={handleCloseDialog}
+        title="Delete this card?"
+        description="This action can’t be undone."
+        isPending={deleteCard.isPending}
+        actionText="Delete Card"
+        onConfirm={(e) => {
+          e.preventDefault();
+          handleConfirmDelete();
+        }}
+      />
+
+      <UpdateCardDialog
+        open={activeDialog === "update"}
+        onOpenChange={handleCloseDialog}
+        onSubmit={handleCloseDialog}
+        card={selectedCard as Card}
+      />
     </div>
   );
 };

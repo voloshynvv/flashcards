@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import { pgTable, uuid, primaryKey } from "drizzle-orm/pg-core";
-
 import { card } from "./card";
 import { category } from "./category";
 
