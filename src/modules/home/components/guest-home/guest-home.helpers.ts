@@ -72,11 +72,15 @@ export const guestCards = [
 
 export const categories = [
   ...new Set(guestCards.map((card) => card.category)),
-].map((category) => ({
-  id: crypto.randomUUID(),
-  name: category,
-  count: 0,
-}));
+].map((category) => {
+  const count = guestCards.filter((card) => card.category === category).length;
+
+  return {
+    id: crypto.randomUUID(),
+    name: category,
+    count,
+  };
+});
 
 export const filterCards = (cards: Card[], categories: string[]) => {
   if (categories.length === 0) {
