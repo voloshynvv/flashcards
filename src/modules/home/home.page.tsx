@@ -1,27 +1,15 @@
-import { QueryClient } from "@tanstack/react-query";
-import { statisticsQueryOptions } from "@/lib/queries/statistics.query";
-import { cardsInfiniteQueryOptions } from "@/lib/queries/cards.query";
+import { getCurrentUser } from "@/lib/session";
 
-import { FlashCards } from "./components/flash-cards";
-import { StudyStats } from "./components/study-stats";
+import { UserHome } from "./components/user-home/user-home";
+import { GuestHome } from "./components/guest-home/guest-home";
 
-export const HomePage = () => {
-  const queryClient = new QueryClient();
-
-  queryClient.prefetchQuery(statisticsQueryOptions());
-  queryClient.prefetchInfiniteQuery(cardsInfiniteQueryOptions());
+export const HomePage = async () => {
+  const user = await getCurrentUser();
 
   return (
     <main className="p-4 pb-10 md:p-8 md:pb-16">
       <div className="mx-auto flex max-w-310 flex-col gap-10 md:gap-12">
-        <div className="grid gap-6 lg:grid-cols-[3fr_1.5fr] lg:gap-8">
-          <div>
-            <FlashCards />
-          </div>
-          <div>
-            <StudyStats />
-          </div>
-        </div>
+        {user ? <UserHome /> : <GuestHome />}
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { card } from "@/db/schema";
+import { getCurrentUser } from "@/lib/session";
 import { eq } from "drizzle-orm";
 
 export const POST = async (
@@ -9,6 +10,17 @@ export const POST = async (
   const { id } = await ctx.params;
 
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const [existingCard] = await db.select().from(card).where(eq(card.id, id));
+
+    if (!existingCard || currentUser.id !== existingCard.userId) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     await db
       .update(card)
       .set({

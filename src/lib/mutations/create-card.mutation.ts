@@ -26,6 +26,7 @@ export const useCreateCard = () => {
     onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ["cards"],
+        refetchType: "all",
       });
       await queryClient.invalidateQueries(categoriesQueryOptions());
     },

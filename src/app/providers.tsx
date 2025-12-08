@@ -1,14 +1,12 @@
 "use client";
 
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToasterProvider } from "@/components/ui/toast";
 import {
   isServer,
   QueryClient,
   QueryClientProvider,
-  defaultShouldDehydrateQuery,
 } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import { ToasterProvider } from "@/components/ui/toast";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -17,20 +15,6 @@ function makeQueryClient() {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
-      },
-      dehydrate: {
-        // include pending queries in dehydration
-        shouldDehydrateQuery: (query) =>
-          defaultShouldDehydrateQuery(query) ||
-          query.state.status === "pending",
-        shouldRedactErrors: (error) => {
-          // We should not catch Next.js server errors
-          // as that's how Next.js detects dynamic pages
-          // so we cannot redact them.
-          // Next.js also automatically redacts errors for us
-          // with better digests.
-          return false;
-        },
       },
     },
   });
@@ -52,7 +36,7 @@ function getQueryClient() {
   }
 }
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+export const Providers = ({ children }: { children: React.ReactNode }) => {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial
@@ -64,8 +48,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       {children}
 
       <ToasterProvider />
-
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
-}
+};

@@ -1,7 +1,5 @@
 "use client";
 
-import { statisticsQueryOptions } from "@/lib/queries/statistics.query";
-import { useQuery } from "@tanstack/react-query";
 import {
   BookOpenIcon,
   BrainIcon,
@@ -9,21 +7,20 @@ import {
   LucideIcon,
   Package2Icon,
 } from "lucide-react";
-import { StudyStatsLoading } from "./study-stats-loading";
 
-export const StudyStats = () => {
-  const { data, isPending, isError } = useQuery(statisticsQueryOptions());
+interface OverviewProps {
+  totalCards: number;
+  masteredCount: number;
+  inProgressCount: number;
+  notStartedCount: number;
+}
 
-  if (isPending) {
-    return <StudyStatsLoading />;
-  }
-
-  if (isError) {
-    return <p>Couldn’t load your study statistics. Please try again later.</p>;
-  }
-
-  const { totalCards, mastered, inProgress, notStarted } = data;
-
+export const Overview = ({
+  totalCards,
+  masteredCount,
+  inProgressCount,
+  notStartedCount,
+}: OverviewProps) => {
   return (
     <aside className="shadow-border-md sticky top-4 flex flex-col gap-2 rounded-2xl border bg-neutral-50 px-4 py-5 lg:p-6">
       <h2 className="mb-2 text-2xl">Study Statistics</h2>
@@ -37,19 +34,19 @@ export const StudyStats = () => {
         />
         <Card
           title="Mastered"
-          value={mastered}
+          value={masteredCount}
           icon={BrainIcon}
           color="#47D9C9"
         />
         <Card
           title="In Progress"
-          value={inProgress}
+          value={inProgressCount}
           icon={BookOpenIcon}
           color="#F073A3"
         />
         <Card
           title="Not Started"
-          value={notStarted}
+          value={notStartedCount}
           icon={Package2Icon}
           color="#FC8AE5"
         />

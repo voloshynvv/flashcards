@@ -19,38 +19,18 @@ import { Loader } from "@/components/ui/loader";
 export const CardsList = () => {
   const [activeDialog, setActiveDialog] = useState<string | null>(null);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-
-  const { filters, updateFilters, resetFilters, filtersApplied } = useFilters();
+  const { filters, filtersKey, updateFilters, resetFilters, filtersApplied } =
+    useFilters();
 
   const deleteCard = useDeleteCard();
 
-  const cardsQuery = useInfiniteQuery(
-    cardsInfiniteQueryOptions({
+  const cardsQuery = useInfiniteQuery({
+    ...cardsInfiniteQueryOptions({
       categoryIds: filters.categoryIds,
       hideMastered: filters.hideMastered,
     }),
-  );
-
-  const handleCloseDialog = () => {
-    setActiveDialog(null);
-    setSelectedCardId(null);
-  };
-
-  const handleConfirmDelete = () => {
-    if (!selectedCardId) return;
-
-    deleteCard.mutate(selectedCardId, {
-      onSuccess: () => {
-        createToast("Card deleted.");
-      },
-      onError: () => {
-        createToast("Something went wrong.");
-      },
-      onSettled: () => {
-        handleCloseDialog();
-      },
-    });
-  };
+    select: (data) => data.pages.flatMap((page) => page.cards),
+  });
 
   if (cardsQuery.isPending) {
     return <Loader className="size-8" />;
@@ -65,8 +45,31 @@ export const CardsList = () => {
     );
   }
 
-  const cards = cardsQuery.data?.pages.map((page) => page.cards).flat();
+  const { data: cards } = cardsQuery;
   const selectedCard = cards.find((card) => card.id === selectedCardId);
+
+  const handleCloseDialog = () => {
+    setActiveDialog(null);
+    setSelectedCardId(null);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!selectedCardId) {
+      return;
+    }
+
+    deleteCard.mutate(selectedCardId, {
+      onSuccess: () => {
+        createToast("Card deleted.");
+      },
+      onError: () => {
+        createToast("Something went wrong.");
+      },
+      onSettled: () => {
+        handleCloseDialog();
+      },
+    });
+  };
 
   if (cards.length === 0 && !filtersApplied) {
     return (
@@ -80,11 +83,7 @@ export const CardsList = () => {
   return (
     <div>
       <div className="mb-6 md:mb-8">
-        <Filters
-          key={filters.categoryIds.length}
-          filters={filters}
-          onChange={updateFilters}
-        >
+        <Filters key={filtersKey} filters={filters} onChange={updateFilters}>
           {filtersApplied && (
             <Button variant="secondary" onClick={resetFilters}>
               Reset

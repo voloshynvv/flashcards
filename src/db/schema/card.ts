@@ -8,6 +8,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 import { cardToCategory } from "./card-category";
+import { user } from "./auth";
 
 export const card = pgTable(
   "card",
@@ -17,6 +18,9 @@ export const card = pgTable(
     answer: text("answer").notNull(),
     knownCount: integer("known_count").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
   },
   (table) => [
     check(

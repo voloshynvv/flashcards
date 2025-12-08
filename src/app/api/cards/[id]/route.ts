@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { card, cardToCategory, category } from "@/db/schema";
+import { getCurrentUser } from "@/lib/session";
 import { eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 import { z } from "zod";
@@ -18,8 +19,6 @@ export const PATCH = async (
   const validatedBody = updateCardSchema.safeParse(body);
   const { id: cardId } = await ctx.params;
 
-  await new Promise<void>((resolve) => setTimeout(resolve, 1000));
-
   if (!validatedBody.success) {
     return Response.json(
       {
@@ -33,13 +32,18 @@ export const PATCH = async (
   const { data } = validatedBody;
 
   try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const [existingCard] = await db
       .select()
       .from(card)
       .where(eq(card.id, cardId));
 
-    if (!existingCard) {
-      return Response.json({ error: "Card not found" }, { status: 404 });
+    if (!existingCard || currentUser.id !== existingCard.userId) {
+      return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
     await db.transaction(async (tx) => {

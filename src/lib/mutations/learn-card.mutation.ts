@@ -18,7 +18,10 @@ export const useLearnCard = () => {
   return useMutation({
     mutationFn: learnCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["cards"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["cards"],
+        refetchType: "all",
+      });
     },
   });
 };

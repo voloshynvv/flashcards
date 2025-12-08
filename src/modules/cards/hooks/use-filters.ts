@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   type CardsFilters,
@@ -13,6 +13,7 @@ const defaultFilters: CardsFilters = {
 export const useFilters = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [filtersKey, setFiltersKey] = useState(0);
 
   const filters = useMemo(() => {
     return cardsSearchParams.parse(Object.fromEntries(searchParams));
@@ -45,6 +46,7 @@ export const useFilters = () => {
 
   const resetFilters = useCallback(() => {
     window.history.pushState(null, "", pathname);
+    setFiltersKey((filtersKey) => filtersKey + 1);
   }, [pathname]);
 
   return {
@@ -52,5 +54,6 @@ export const useFilters = () => {
     updateFilters,
     filtersApplied,
     resetFilters,
+    filtersKey,
   };
 };
