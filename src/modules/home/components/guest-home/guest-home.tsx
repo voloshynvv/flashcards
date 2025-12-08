@@ -6,6 +6,7 @@ import { filterCards, guestCards, categories } from "./guest-home.helprs";
 import { StudyCard } from "../study-card";
 import { Overview } from "../overview";
 import { GuestCategories } from "./guest-categories";
+import { Alert } from "@/components/ui/alert";
 
 export const GuestHome = () => {
   const [step, setStep] = useState(0);
@@ -27,7 +28,9 @@ export const GuestHome = () => {
   };
 
   return (
-    <div>
+    <div className="space-y-10">
+      <Alert message="You're currently exploring in guest mode. Sign in anytime to unlock all features and keep your progress saved!" />
+
       <div className="grid items-start gap-6 lg:grid-cols-[3fr_1.5fr] lg:gap-8">
         <StudyCard
           card={currentCard}
