@@ -2,28 +2,27 @@ import { queryOptions } from "@tanstack/react-query";
 
 export interface Category {
   id: string;
-  name: string;
   count: number;
+  name: string;
 }
 
-export const getCategories = async (name: string) => {
-  const params = new URLSearchParams();
-  if (name) {
-    params.append("name", name);
-  }
+interface GetCategoriesResponse {
+  categories: Category[];
+}
 
-  const response = await fetch(`/api/categories?${params}`);
+export const getCategories = async () => {
+  const response = await fetch("/api/categories");
 
   if (!response.ok) {
     throw new Error("failed to get categories");
   }
 
-  const data = (await response.json()) as { categories: Category[] };
+  const data = (await response.json()) as GetCategoriesResponse;
   return data.categories;
 };
 
-export const categoriesQueryOptions = (name = "") =>
+export const categoriesQueryOptions = () =>
   queryOptions({
-    queryKey: ["categories", { name }],
-    queryFn: () => getCategories(name),
+    queryKey: ["categories"],
+    queryFn: getCategories,
   });

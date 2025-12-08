@@ -19,7 +19,10 @@ export const useDeleteCard = () => {
   return useMutation({
     mutationFn: deleteCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["cards"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["cards"],
+        refetchType: "all",
+      });
       await queryClient.invalidateQueries(categoriesQueryOptions());
     },
   });

@@ -18,7 +18,10 @@ export const useResetProgress = () => {
   return useMutation({
     mutationFn: resetProgress,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["cards"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["cards"],
+        refetchType: "all",
+      });
     },
   });
 };

@@ -132,7 +132,6 @@ export const POST = async (request: NextRequest) => {
       message: "Card created successfully",
     });
   } catch (e) {
-    console.log(e);
     return Response.json(
       { error: "Failed to create a new card" },
       { status: 500 },

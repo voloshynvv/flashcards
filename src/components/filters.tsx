@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { categoriesQueryOptions } from "@/lib/queries/categories.query";
 import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
 
@@ -15,12 +15,12 @@ interface FiltersProps {
 
 export const Filters = ({ filters, onChange, children }: FiltersProps) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const categoriesQuery = useSuspenseQuery(categoriesQueryOptions());
+  const categoriesQuery = useQuery(categoriesQueryOptions());
 
   return (
     <div className="flex flex-wrap items-center gap-5">
       <CategoriesDropdown
-        categories={categoriesQuery.data}
+        categories={categoriesQuery.data ?? []}
         selectedCategories={selectedCategories}
         onChange={setSelectedCategories}
         onOpenChange={(open) => {

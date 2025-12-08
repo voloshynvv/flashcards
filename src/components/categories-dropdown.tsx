@@ -36,6 +36,7 @@ export const CategoriesDropdown = ({
           <Button
             variant="secondary"
             disabled={categories.length === 0}
+            className="hover:bg-neutral-50"
             noShadow
           >
             All Categories <ChevronDownIcon />
