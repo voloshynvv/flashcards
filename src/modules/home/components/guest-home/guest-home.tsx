@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { filterCards, guestCards, categories } from "./guest-home.helprs";
+import { filterCards, guestCards, categories } from "./guest-home.helpers";
 
 import { StudyCard } from "../study-card";
 import { Overview } from "../overview";
