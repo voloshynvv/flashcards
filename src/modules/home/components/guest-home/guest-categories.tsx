@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Category } from "@/lib/queries/categories.query";
 
-import { CategoriesDropdown } from "@/components/categories-dropdown";
+import { CategoriesDropdown } from "@/components/shared/categories-dropdown";
 
 interface GuestCategoriesProps {
   categories: Category[];
@@ -23,7 +23,7 @@ export const GuestCategories = ({
       }}
       categories={categories}
       selectedCategories={selectedCategories}
-      onChange={setSelectedCategories}
+      onSelect={setSelectedCategories}
       lookUpBy="name"
     />
   );

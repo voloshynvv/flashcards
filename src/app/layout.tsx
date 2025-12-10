@@ -1,16 +1,10 @@
+import { PropsWithChildren } from "react";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
-import "./globals.css";
+import { poppins } from "@/styles/fonts";
+import "@/styles/globals.css";
 
-import { Navbar } from "@/components/navbar";
 import { Providers } from "./providers";
-
-const poppins = Poppins({
-  variable: "--font-poppins",
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-  subsets: ["latin"],
-});
+import { Navbar } from "@/components/navbar/navbar";
 
 export const metadata: Metadata = {
   title: "Flashcards App",
@@ -18,11 +12,7 @@ export const metadata: Metadata = {
     "A simple and fast flashcards app for studying and memorization.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html lang="en" className={`${poppins.variable} antialiased`}>
       <body>
@@ -33,4 +23,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

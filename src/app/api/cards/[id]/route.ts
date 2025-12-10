@@ -1,15 +1,10 @@
+import { z } from "zod";
 import { db } from "@/db";
 import { card, cardToCategory, category } from "@/db/schema";
 import { getCurrentUser } from "@/lib/session";
+import { updateCardSchema } from "@/lib/validators/card.schema";
 import { and, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
-import { z } from "zod";
-
-const updateCardSchema = z.object({
-  question: z.string().min(1, { error: "Question is required." }).optional(),
-  answer: z.string().min(1, { error: "Answer is required." }).optional(),
-  category: z.string().min(1, { error: "Category is required." }).optional(),
-});
 
 export const PATCH = async (
   request: NextRequest,

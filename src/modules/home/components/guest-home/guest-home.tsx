@@ -6,7 +6,7 @@ import { filterCards, guestCards, categories } from "./guest-home.helpers";
 import { StudyCard } from "../study-card";
 import { Overview } from "../overview";
 import { GuestCategories } from "./guest-categories";
-import { Alert } from "@/components/ui/alert";
+import { Alert } from "@/components/ui/feedback/alert";
 
 export const GuestHome = () => {
   const [step, setStep] = useState(0);

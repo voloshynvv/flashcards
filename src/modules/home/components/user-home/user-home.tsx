@@ -9,9 +9,9 @@ import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
 import { Overview } from "../overview";
 import { StudyCard } from "../study-card";
 import { CardActions } from "./card-actions";
-import { Filters } from "@/components/filters";
-import { Empty } from "@/components/ui/empty";
-import { Loader } from "@/components/ui/loader";
+import { Filters } from "@/components/shared/filters";
+import { Empty } from "@/components/ui/feedback/empty";
+import { Loader } from "@/components/ui/feedback/loader";
 
 export const UserHome = () => {
   const [step, setStep] = useState(0);
@@ -61,7 +61,7 @@ export const UserHome = () => {
   const hasPrev = step > 0;
   const offset = itemsPerPage * currentPage - 1;
 
-  const handleChangeFilters = (newFilters: CardsFilters) => {
+  const handleSelectFilters = (newFilters: CardsFilters) => {
     setFilters(newFilters);
     setStep(0);
   };
@@ -91,7 +91,7 @@ export const UserHome = () => {
         step={step}
         totalCards={totalItems}
         filtersSlot={
-          <Filters filters={filters} onChange={handleChangeFilters} />
+          <Filters filters={filters} onChange={handleSelectFilters} />
         }
         cardActionsSlot={<CardActions card={currentCard} />}
         filtersApplied={filtersApplied}

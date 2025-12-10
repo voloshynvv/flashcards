@@ -3,9 +3,9 @@ import { CheckCircleIcon, RotateCcwIcon } from "lucide-react";
 import { Card } from "@/lib/queries/cards.query";
 import { useLearnCard } from "@/lib/mutations/learn-card.mutation";
 import { useResetProgress } from "@/lib/mutations/reset-progress.mutation";
-import { createToast } from "@/components/ui/toast";
+import { createToast } from "@/components/ui/feedback/toast";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 
 interface CardActionsProps {
   card: Card;

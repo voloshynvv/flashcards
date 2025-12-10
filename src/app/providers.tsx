@@ -1,7 +1,8 @@
 "use client";
 
+import { PropsWithChildren } from "react";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { ToasterProvider } from "@/components/ui/toast";
+import { ToasterProvider } from "@/components/ui/feedback/toast";
 import {
   isServer,
   QueryClient,
@@ -36,7 +37,7 @@ function getQueryClient() {
   }
 }
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
+export const Providers = ({ children }: PropsWithChildren) => {
   // NOTE: Avoid useState when initializing the query client if you don't
   //       have a suspense boundary between this and the code that may
   //       suspend because React will throw away the client on the initial

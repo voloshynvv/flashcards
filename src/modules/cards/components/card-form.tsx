@@ -2,30 +2,28 @@
 
 import { useId } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircleIcon, CirclePlus } from "lucide-react";
-import { useCreateCard } from "@/lib/mutations/create-card.mutation";
-import { useUpdateCard } from "@/lib/mutations/update-card.mutation";
+import { CreateCard, createCardSchema } from "@/lib/validators/card.schema";
 
-import { Button } from "@/components/ui/button";
-import { FormField } from "@/components/ui/form-field";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { createToast } from "@/components/ui/toast";
-
-export const formSchema = z.object({
-  question: z.string().min(1, { error: "Please enter a question." }),
-  answer: z.string().min(1, { error: "Please enter an answer" }),
-  category: z.string().min(1, { error: "Please enter a category." }),
-});
+import { Button } from "@/components/ui/button/button";
+import { FormField } from "@/components/ui/form/form-field";
+import { Input } from "@/components/ui/form/input";
+import { Textarea } from "@/components/ui/form/textarea";
 
 interface CreateCardFormProps {
-  initialValues?: z.infer<typeof formSchema> & { id: string };
-  onSubmit?: () => void;
+  initialValues?: CreateCard;
+  hasError?: boolean;
+  onSubmit: (data: CreateCard, reset: () => void) => void;
+  isLoading?: boolean;
 }
 
-export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
+export const CardForm = ({
+  initialValues,
+  hasError,
+  onSubmit,
+  isLoading,
+}: CreateCardFormProps) => {
   const id = useId();
 
   const form = useForm({
@@ -34,40 +32,18 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
       answer: initialValues?.answer ?? "",
       category: initialValues?.category ?? "",
     },
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(createCardSchema),
   });
-
-  const createCardMutation = useCreateCard();
-  const updateCardMutation = useUpdateCard();
 
   const {
     formState: { errors },
   } = form;
 
-  const handleSubmit = form.handleSubmit(async (data) => {
-    if (initialValues) {
-      updateCardMutation.mutate(
-        { id: initialValues.id, data },
-        {
-          onSuccess: () => {
-            createToast("Card updated successfully.");
-            form.reset();
-            onSubmit?.();
-          },
-        },
-      );
-    } else {
-      createCardMutation.mutate(data, {
-        onSuccess: () => {
-          createToast("Card created successfully.");
-          form.reset();
-          onSubmit?.();
-        },
-      });
-    }
-  });
+  const isCreateMode = Boolean(initialValues);
 
-  const hasError = createCardMutation.isError || updateCardMutation.isError;
+  const handleSubmit = form.handleSubmit(async (data) => {
+    onSubmit(data, () => form.reset());
+  });
 
   return (
     <form onSubmit={handleSubmit}>
@@ -123,17 +99,17 @@ export const CardForm = ({ initialValues, onSubmit }: CreateCardFormProps) => {
           </div>
         )}
 
-        {initialValues ? (
-          <div className="justify-self-end">
-            <Button type="submit" disabled={updateCardMutation.isPending}>
-              Update Card
-            </Button>
-          </div>
-        ) : (
-          <Button disabled={createCardMutation.isPending} type="submit">
+        {isCreateMode ? (
+          <Button type="submit" disabled={isLoading}>
             <CirclePlus />
             Create Card
           </Button>
+        ) : (
+          <div className="justify-self-end">
+            <Button type="submit" disabled={isLoading}>
+              Update Card
+            </Button>
+          </div>
         )}
       </div>
     </form>

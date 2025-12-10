@@ -6,5 +6,7 @@ export const createCardSchema = z.object({
   category: z.string().min(1, { error: "Category is required." }),
 });
 
+export const updateCardSchema = createCardSchema.partial();
+
 export type CreateCard = z.infer<typeof createCardSchema>;
-export type UpdateCard = Partial<CreateCard>;
+export type UpdateCard = z.infer<typeof updateCardSchema>;

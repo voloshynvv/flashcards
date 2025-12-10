@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 
-import { Button } from "./ui/button";
-import { Loader } from "./ui/loader";
+import { Button } from "@/components/ui/button/button";
+import { Loader } from "@/components/ui/feedback/loader";
 
 export const AuthButton = () => {
   const router = useRouter();

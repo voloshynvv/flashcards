@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { categoriesQueryOptions } from "../queries/categories.query";
-import { CreateCard } from "../validators/create-card.schema";
+import { CreateCard } from "../validators/card.schema";
 
 export const createCard = async (data: CreateCard) => {
   const response = await fetch(`/api/cards`, {

@@ -1,13 +1,16 @@
 import { ChevronDownIcon } from "lucide-react";
 import { Category } from "@/lib/queries/categories.query";
 
-import { DropdownMenu, DropdownMenuCheckboxItem } from "./ui/dropdown-menu";
-import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+} from "@/components/ui/dropdown-menu/dropdown-menu";
+import { Button } from "@/components/ui/button/button";
 
 interface CategoriesDropdownProps {
   categories: Category[];
   selectedCategories: string[];
-  onChange: (value: string[]) => void;
+  onSelect: (value: string[]) => void;
   onOpenChange?: (open: boolean) => void;
   lookUpBy?: "id" | "name";
 }
@@ -15,15 +18,15 @@ interface CategoriesDropdownProps {
 export const CategoriesDropdown = ({
   categories,
   selectedCategories,
-  onChange,
+  onSelect,
   onOpenChange,
   lookUpBy = "id",
 }: CategoriesDropdownProps) => {
   const handleCheckedChange = (value: string) => {
     if (selectedCategories.includes(value)) {
-      onChange(selectedCategories.filter((id) => id !== value));
+      onSelect(selectedCategories.filter((id) => id !== value));
     } else {
-      onChange([...selectedCategories, value]);
+      onSelect([...selectedCategories, value]);
     }
   };
 

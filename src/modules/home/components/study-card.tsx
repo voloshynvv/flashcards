@@ -5,8 +5,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Card } from "@/lib/queries/cards.query";
 
 import { StudyCardItem } from "./study-card-item";
-import { Button } from "@/components/ui/button";
-import { Empty } from "@/components/ui/empty";
+import { Button } from "@/components/ui/button/button";
+import { Empty } from "@/components/ui/feedback/empty";
 
 interface StudyCardProps {
   card: Card | null;

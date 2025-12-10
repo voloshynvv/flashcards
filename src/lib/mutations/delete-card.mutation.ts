@@ -13,17 +13,30 @@ export const deleteCard = async (id: string) => {
   return null;
 };
 
-export const useDeleteCard = () => {
+interface UseDeleteCardArgs {
+  onSuccess?: () => void;
+  onError?: () => void;
+}
+
+export const useDeleteCard = ({
+  onSuccess,
+  onError,
+}: UseDeleteCardArgs = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: deleteCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["cards"],
-        refetchType: "all",
-      });
-      await queryClient.invalidateQueries(categoriesQueryOptions());
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["cards"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries(categoriesQueryOptions()),
+      ]);
+
+      onSuccess?.();
     },
+    onError,
   });
 };

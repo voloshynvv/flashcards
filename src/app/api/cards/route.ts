@@ -4,7 +4,7 @@ import z from "zod";
 import { card, cardToCategory, category } from "@/db/schema";
 import { cardsSearchParamsWithPage } from "@/lib/validators/cards-search-params.schema";
 import { NextRequest } from "next/server";
-import { createCardSchema } from "@/lib/validators/create-card.schema";
+import { createCardSchema } from "@/lib/validators/card.schema";
 import { getCurrentUser } from "@/lib/session";
 
 const PAGE_SIZE = 12;

@@ -1,8 +1,9 @@
 import { Brain } from "lucide-react";
-import { Progress } from "./ui/progress";
-import { Tag } from "./ui/tag";
 
-const MAX_ALLOWED_PROGRESS = 5;
+import { Progress } from "@/components/ui/form/progress";
+import { Tag } from "@/components/ui/feedback/tag";
+
+const MAX_ALLOWED_PROGRESS = 5; // TODO
 
 interface CardProgressProps {
   value?: number;

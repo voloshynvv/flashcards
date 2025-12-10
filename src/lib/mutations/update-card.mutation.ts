@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { categoriesQueryOptions } from "../queries/categories.query";
-import { UpdateCard } from "../validators/create-card.schema";
+import { UpdateCard } from "../validators/card.schema";
 
 export const updateCard = async (id: string, data: UpdateCard) => {
   const response = await fetch(`/api/cards/${id}`, {
@@ -18,18 +18,26 @@ export const updateCard = async (id: string, data: UpdateCard) => {
   return null;
 };
 
-export const useUpdateCard = () => {
+interface UseUpdateCardArgs {
+  onSuccess?: () => void;
+}
+
+export const useUpdateCard = ({ onSuccess }: UseUpdateCardArgs) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateCard }) =>
       updateCard(id, data),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["cards"],
-        refetchType: "all",
-      });
-      await queryClient.invalidateQueries(categoriesQueryOptions());
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["cards"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries(categoriesQueryOptions()),
+      ]);
+
+      onSuccess?.();
     },
   });
 };

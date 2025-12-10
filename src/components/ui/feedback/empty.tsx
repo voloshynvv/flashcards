@@ -1,10 +1,10 @@
 import { cn } from "@/utils/cn";
+import { PropsWithChildren } from "react";
 
-interface EmptyProps {
+interface EmptyProps extends PropsWithChildren {
   title: React.ReactNode;
   description: React.ReactNode;
   muted?: boolean;
-  children?: React.ReactNode;
 }
 
 export const Empty = ({ title, description, muted, children }: EmptyProps) => {

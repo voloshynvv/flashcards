@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { PropsWithChildren, useState } from "react";
 import { cn } from "@/utils/cn";
 import { Card } from "@/lib/queries/cards.query";
 
 import { Star } from "./star";
-import { CardProgress } from "@/components/card-progress";
-import { Tag } from "@/components/ui/tag";
+import { CardProgress } from "@/components/shared/card-progress";
+import { Tag } from "@/components/ui/feedback/tag";
 
 interface StudyCardItemProps {
   card: Card;
@@ -50,10 +50,10 @@ export const StudyCardItem = ({ card }: StudyCardItemProps) => {
   );
 };
 
-interface CardShellProps extends React.ComponentProps<"div"> {
+interface CardShellProps
+  extends React.ComponentProps<"div">, PropsWithChildren {
   card: Card;
   isFlipped?: boolean;
-  children: React.ReactNode;
 }
 
 export const CardShell = ({
