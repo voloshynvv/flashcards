@@ -7,11 +7,11 @@ import { createToast } from "@/components/ui/feedback/toast";
 
 import { Button } from "@/components/ui/button/button";
 
-interface CardActionsProps {
+interface ActionsProps {
   card: Card;
 }
 
-export const CardActions = ({ card }: CardActionsProps) => {
+export const Actions = ({ card }: ActionsProps) => {
   const learnCard = useLearnCard();
   const resetProgress = useResetProgress();
 

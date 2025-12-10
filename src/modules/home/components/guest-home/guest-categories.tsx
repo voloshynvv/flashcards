@@ -5,22 +5,24 @@ import { CategoriesDropdown } from "@/components/shared/categories-dropdown";
 
 interface GuestCategoriesProps {
   categories: Category[];
-  onSelect?: (selectedCategories: string[]) => void;
+  onChange?: (selectedCategories: string[]) => void;
 }
 
 export const GuestCategories = ({
   categories,
-  onSelect,
+  onChange,
 }: GuestCategoriesProps) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
+  const hanldeOpenChange = (open: boolean) => {
+    if (!open) {
+      onChange?.(selectedCategories);
+    }
+  };
+
   return (
     <CategoriesDropdown
-      onOpenChange={(open) => {
-        if (!open) {
-          onSelect?.(selectedCategories);
-        }
-      }}
+      onOpenChange={hanldeOpenChange}
       categories={categories}
       selectedCategories={selectedCategories}
       onSelect={setSelectedCategories}

@@ -8,10 +8,15 @@ import { CardsFilters } from "@/lib/validators/cards-search-params.schema";
 
 import { Overview } from "../overview";
 import { StudyCard } from "../study-card";
-import { CardActions } from "./card-actions";
+import { Actions } from "./actions";
 import { Filters } from "@/components/shared/filters";
 import { Empty } from "@/components/ui/feedback/empty";
 import { Loader } from "@/components/ui/feedback/loader";
+
+const defaultFilters = {
+  categoryIds: [],
+  hideMastered: false,
+};
 
 export const UserHome = () => {
   const [step, setStep] = useState(0);
@@ -93,7 +98,7 @@ export const UserHome = () => {
         filtersSlot={
           <Filters filters={filters} onChange={handleSelectFilters} />
         }
-        cardActionsSlot={<CardActions card={currentCard} />}
+        cardActionsSlot={<Actions card={currentCard} />}
         filtersApplied={filtersApplied}
         nextDisabled={
           !hasNext || (cardsQuery.isFetchingNextPage && step === offset)
@@ -115,9 +120,4 @@ export const UserHome = () => {
       )}
     </div>
   );
-};
-
-const defaultFilters = {
-  categoryIds: [],
-  hideMastered: false,
 };

@@ -43,7 +43,7 @@ export const GuestHome = () => {
           filtersSlot={
             <GuestCategories
               categories={categories}
-              onSelect={(categories) => {
+              onChange={(categories) => {
                 setSelectedCategories(categories);
                 setStep(0);
               }}

@@ -24,11 +24,13 @@ export const useCreateCard = () => {
   return useMutation({
     mutationFn: createCard,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: ["cards"],
-        refetchType: "all",
-      });
-      await queryClient.invalidateQueries(categoriesQueryOptions());
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["cards"],
+          refetchType: "all",
+        }),
+        queryClient.invalidateQueries(categoriesQueryOptions()),
+      ]);
     },
   });
 };
