@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flashcard app
+Live Site URL: https://flashcards-lac-one.vercel.app/
 
-## Getting Started
+## Tech Stack
+- Next.js
+- Tanstack Query
+- React Hook Form
+- Tailwind CSS
+- Drizzle ORM
+- Better Auth
 
-First, run the development server:
+## The challenge
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Users should be able to:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Flashcard Management
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Create new flashcards with a question, answer, and category
+- Edit existing flashcards to update their details
+- Delete flashcards they no longer need
+- See form validation messages when trying to submit a card without all fields completed
+- View all their flashcards in a grid layout
+- See flashcard details including question, answer, category, and mastery progress
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+#### Study Mode
 
-## Learn More
+- Study flashcards one at a time in Study Mode
+- Click on a flashcard to reveal the answer
+- Mark a flashcard as known by clicking "I Know This" to track mastery progress
+- Navigate between flashcards using Previous and Next buttons
+- See which card they're currently viewing (e.g., "Card 1 of 40")
+- Track mastery progress for each card on a scale of 0 to 5
+- Reset progress on a flashcard to start learning it again
 
-To learn more about Next.js, take a look at the following resources:
+#### Filtering & Organization
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Filter flashcards by selecting one or multiple categories
+- See the number of cards in each category within the filter dropdown
+- Hide mastered cards to focus on cards that still need practice
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Statistics & Progress
 
-## Deploy on Vercel
+- View study statistics showing total cards, mastered, in progress, and not started counts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### UI & Navigation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Toggle between Study Mode and All Cards views
+- Load more flashcards when viewing the full card list with more than 12 cards
+- See a toast message when a card is created, updated, or deleted
+- View the optimal layout for the interface depending on their device's screen size
+- Navigate the entire app using only their keyboard
